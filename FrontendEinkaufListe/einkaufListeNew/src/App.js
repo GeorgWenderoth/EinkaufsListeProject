@@ -90,7 +90,7 @@ class App extends React.Component{ // es mit klasse versuchen
      } */
 
     back () {
-        const promise = axios.get('http://127.0.0.1:8080/einkaufsListeElemente')
+        const promise = axios.get('http://127.0.0.1:8081/einkaufsListeElemente')
         const daten = promise.then( wert => this.setState({punkt: wert.data})) //was mache ich hier genau // wert => ob.dato = wert.data
         // const daten = promise.data;
         console.log(this.state.punkt);
@@ -116,7 +116,7 @@ class App extends React.Component{ // es mit klasse versuchen
 
     axios({
       method: 'post',
-      url: 'http://127.0.0.1:8080/einkaufsListe',
+      url: 'http://127.0.0.1:8081/einkaufsListe',
       data: {
         "itId": 100,
         "einkaufsPunkt": this.state.value,
@@ -151,7 +151,7 @@ class App extends React.Component{ // es mit klasse versuchen
         e.preventDefault();
         axios({
             method: 'delete',
-            url: 'http://127.0.0.1:8080/einkaufsListeElementLoeschen',
+            url: 'http://127.0.0.1:8081/einkaufsListeElementLoeschen',
             data: {
                 "itId": a,
                 "einkaufsPunkt": "platzhalterdatenloeschen",
@@ -163,7 +163,7 @@ class App extends React.Component{ // es mit klasse versuchen
     handleDurchstreichen(a,e){
         axios({
             method: 'put',
-            url: 'http://127.0.0.1:8080/einkaufsListeDurchgestrichen',
+            url: 'http://127.0.0.1:8081/einkaufsListeDurchgestrichen',
             data: {
                 "itId": a,
                 "einkaufsPunkt": "platzhalterdatenloeschen",
