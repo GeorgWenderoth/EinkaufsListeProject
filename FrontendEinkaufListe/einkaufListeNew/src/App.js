@@ -41,8 +41,10 @@ export default App;
 import axios from 'axios';
 import React, { useState } from "react";
 import "./App.css";
+
 import Item from "./Item";
 import { v4 as uuidv4 } from "uuid";
+import {ListElement} from "./listElement";
 
 /*const arr = () => {
   let data = localStorage.getItem("data");
@@ -70,15 +72,17 @@ class App extends React.Component{ // es mit klasse versuchen
         super(props);
         this.state = {
             value: '',
-            punkt: []
+            punkt: [],
+            amount: ''
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+       // this.handleButton = this.handleButton.bind(this);
 
         //this.handlePunktChange = this.handlePunktChange.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount() { //?
         this.back();
     }
 
@@ -113,42 +117,40 @@ class App extends React.Component{ // es mit klasse versuchen
      }
 
    handleSubmit = (event) =>{
-
-    axios({
+       event.preventDefault(); //event.preventDefault bei Submit behebt den fehler, eite wird nicht mehr selbstständig geladen
+   console.log("target: " + event.target[0].value);
+       axios({
       method: 'post',
       url: 'http://127.0.0.1:8081/einkaufsListe',
       data: {
         "itId": 100,
         "einkaufsPunkt": this.state.value,
-        "strich": false
+        "strich": false,
+        "amount": 1
       },
     })
-
-   /* console.log(test[1]);
-    const newItem = {
-      id: uuidv4(),
-      item: item,
-      complete: false,
-    };
-    console.log(newItem.id);
-    e.preventDefault();
-    if (item && item.length <= 25) {
-      setList([...list, newItem]);
-      setItem("");
-    } */
   };
- /* React.useEffect(() => {
-    localStorage.setItem("data", JSON.stringify(list)); // in local storage gespeichert
 
-  }, [list]); */
- /* const handleChange = (e) => {
-    setItem(e.target.value);
-    console.log(e.target.value);
-  }; */
+    handleNumber(a,e){
+        this.setState({amount: e.target.value});
+        console.log("nummber: " +e.target.value);
+        e.preventDefault();
+        axios({
+            method: 'put',
+            url: 'http://127.0.0.1:8081/einkaufsListeAnzahlAendern',
+            data: {
+                "itId": a,
+                "einkaufsPunkt": "platzhalterdatenloeschen",
+                "strich": false,
+                "amount": e.target.value
+            },
+
+        })
+    }
 
     handleButton(a,e){
         console.log(a);
-        e.preventDefault();
+       e.preventDefault();
         axios({
             method: 'delete',
             url: 'http://127.0.0.1:8081/einkaufsListeElementLoeschen',
@@ -160,7 +162,7 @@ class App extends React.Component{ // es mit klasse versuchen
         })
     }
 
-    handleDurchstreichen(a,e){
+    handleDurchstreichen(a){
         axios({
             method: 'put',
             url: 'http://127.0.0.1:8081/einkaufsListeDurchgestrichen',
@@ -182,46 +184,17 @@ class App extends React.Component{ // es mit klasse versuchen
                     <input type="text" id="inp" value={this.state.value} onChange={this.handleChange}/>
                     <input type="submit" value="Button"/>
                 </form>
-                <ul>{ this.state.punkt.map((a) => <li key={a.itId.toString()}>{a.einkaufsPunkt}
+                <ul>{ this.state.punkt.map((a) => <ListElement a={a} id={a.itId} />
+                    /* <li key={a.itId.toString()}>{a.einkaufsPunkt}
+                <input type="number" value={this.state.amount} onChange={(e) => this.handleNumber(a.itId,e)}/>
                 <button id="e" onClick={(e) => this.handleButton(a.itId,e)}>Loeschen</button>
-                <input type="checkbox" checked={a.strich} onClick={(e) => this.handleDurchstreichen(a.itId,e)}/></li> )}
-
+                <input type="checkbox" checked={a.strich}  onChange={(e) => this.handleDurchstreichen(a.itId)}  /></li> )}
+*/ )}
                 </ul>
             </div>
         )
     }
-     /*   return (
-            <div className="App">
-                <h1>Grocery List</h1>
-                <form onSubmit={handleSubmit}>
-                    <input
-                        className="input"
-                        type="text"
-                        value={item}
-                        placeholder="Enter the items"
-                        onChange={handleChange}
-                    />
-                    <button className="btn" type="submit">
-                        Add Items
-                    </button>
-                    <br></br>
-                    <br></br>
-                </form>
-                <div>
-                    {list.map((c, id) => ( // ws macht er hier genau
-                        <Item
-                            key={id}
-                            id={c.id}
-                            item={item}
-                            list={list}
-                            setList={setList}
-                            complete={c.complete}
-                            setItem={setItem}
-                        />
-                    ))}
-                </div>
-            </div>
-        ); */
+
 }
 
 export default App;
