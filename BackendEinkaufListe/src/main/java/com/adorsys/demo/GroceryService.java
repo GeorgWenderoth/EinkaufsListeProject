@@ -31,6 +31,13 @@ public class GroceryService {
         return this.repository.findByItId(id).orElseThrow(() -> new ElementNichtVorhanden("Das Gesuchte Element ist nicht vorhanden"));
     }
 
+    public EinkaufElement änderAnzahl(int id, int amount){
+        EinkaufElement element = this.sucheElement(id);
+        element.setAmount(amount);
+        repository.save(element);
+        return element;
+    }
+
     public EinkaufElement streicheDurch(int id, boolean strich){
         EinkaufElement element = this.sucheElement(id);
         if(element.getStrich()){

@@ -57,6 +57,13 @@ public class groceryController {
         return  new ResponseEntity<>(einkaufElement, HttpStatus.CREATED); // Warum nochmal returnen
 
     }
+
+    @CrossOrigin
+    @PutMapping("/einkaufsListeAnzahlAendern")
+    public ResponseEntity<EinkaufElement> anzahl(@RequestBody EinkaufElement element){
+        return new ResponseEntity<>(this.service.änderAnzahl(element.getItId(), element.getAmount()),HttpStatus.OK);
+    }
+
     @CrossOrigin
     @PutMapping("/einkaufsListeDurchgestrichen")
     public ResponseEntity<EinkaufElement> durchstreichen(@RequestBody EinkaufElement element){

@@ -1,8 +1,10 @@
 import axios from 'axios';
 import React, { useState } from "react";
+import {Col} from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 
 export function ListElement(props) {
-
     const [amount, setAmount] = useState(props.a.amount);
     //setAmount(props.a.amount);
 
@@ -58,9 +60,13 @@ export function ListElement(props) {
     }
 
     return(
-        <li key={props.a.itId.toString()}>{props.a.einkaufsPunkt}
+        <div  key={props.a.itId.toString()}>
+            <button><FontAwesomeIcon className="form-icon" icon={faPen}/></button>
+            {props.a.einkaufsPunkt}
+
             <input type="number" value={amount} onChange={(e) => handleNumber(e)}/>
             <button id="e" onClick={(e) => handleButton(e)}>Loeschen</button>
-            <input type="checkbox" checked={props.a.strich}  onChange={(e) => handleDurchstreichen(props.a.itId)}  /></li>
+            <input type="checkbox" checked={props.a.strich}  onChange={(e) => handleDurchstreichen(props.a.itId)}  /></div>
+
     )
 }

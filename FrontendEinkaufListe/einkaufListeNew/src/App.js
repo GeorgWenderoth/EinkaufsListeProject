@@ -40,7 +40,10 @@ export default App;
 
 import axios from 'axios';
 import React, { useState } from "react";
-import "./App.css";
+//import "./App.css";
+//import 'bootstrap/dist/css/bootstrap.min.css';
+import {Col, Container, Row} from "react-bootstrap";
+import "./Styles.css";
 
 import Item from "./Item";
 import { v4 as uuidv4 } from "uuid";
@@ -118,15 +121,24 @@ class App extends React.Component{ // es mit klasse versuchen
 
    handleSubmit = (event) =>{
        event.preventDefault(); //event.preventDefault bei Submit behebt den fehler, eite wird nicht mehr selbstständig geladen
+       const s = this.state.value.split(/(\d+)/);
+       const anzahl = s[s.length -2];
+       console.log("split: " + anzahl);
+       console.log("ar: " + s);
+       s.length =  s.length -2;
+
+       console.log("sL: " + s.length + "s: " +s);
+        const p = s.toString();
+
    console.log("target: " + event.target[0].value);
        axios({
       method: 'post',
       url: 'http://127.0.0.1:8081/einkaufsListe',
       data: {
         "itId": 100,
-        "einkaufsPunkt": this.state.value,
+        "einkaufsPunkt": p,
         "strich": false,
-        "amount": 1
+        "amount": anzahl,
       },
     })
   };
@@ -184,13 +196,17 @@ class App extends React.Component{ // es mit klasse versuchen
                     <input type="text" id="inp" value={this.state.value} onChange={this.handleChange}/>
                     <input type="submit" value="Button"/>
                 </form>
-                <ul>{ this.state.punkt.map((a) => <ListElement a={a} id={a.itId} />
-                    /* <li key={a.itId.toString()}>{a.einkaufsPunkt}
-                <input type="number" value={this.state.amount} onChange={(e) => this.handleNumber(a.itId,e)}/>
-                <button id="e" onClick={(e) => this.handleButton(a.itId,e)}>Loeschen</button>
-                <input type="checkbox" checked={a.strich}  onChange={(e) => this.handleDurchstreichen(a.itId)}  /></li> )}
-*/ )}
-                </ul>
+
+                <Container  >
+
+                        { this.state.punkt.map((a) => <Col md={3} ><ListElement a={a} id={a.itId} />
+                        </Col> )}
+
+
+                </Container>
+
+
+
             </div>
         )
     }
@@ -198,3 +214,15 @@ class App extends React.Component{ // es mit klasse versuchen
 }
 
 export default App;
+
+/* <li key={a.itId.toString()}>{a.einkaufsPunkt}
+                <input type="number" value={this.state.amount} onChange={(e) => this.handleNumber(a.itId,e)}/>
+                <button id="e" onClick={(e) => this.handleButton(a.itId,e)}>Loeschen</button>
+                <input type="checkbox" checked={a.strich}  onChange={(e) => this.handleDurchstreichen(a.itId)}  /></li> )}
+*/
+
+/*<div className="grid">{ this.state.punkt.map((a) => <ListElement a={a} id={a.itId} />
+                    )}
+                </div>
+
+ */
