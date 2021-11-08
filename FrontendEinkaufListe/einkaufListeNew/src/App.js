@@ -40,10 +40,11 @@ export default App;
 
 import axios from 'axios';
 import React, { useState } from "react";
-//import "./App.css";
-//import 'bootstrap/dist/css/bootstrap.min.css';
+
+import "./App.scss";
+
 import {Col, Container, Row} from "react-bootstrap";
-import "./Styles.css";
+//import "./Styles.css";
 
 import Item from "./Item";
 import { v4 as uuidv4 } from "uuid";
@@ -198,11 +199,19 @@ class App extends React.Component{ // es mit klasse versuchen
                 </form>
 
                 <Container  >
+                <Row >{ this.state.punkt.map((a) =>  <Col   ><ListElement a={a} id={a.itId} />
+                </Col> )}</Row>
 
-                        { this.state.punkt.map((a) => <Col md={3} ><ListElement a={a} id={a.itId} />
-                        </Col> )}
 
 
+                </Container>
+                    <div>
+                        {"hallo" +
+                        ""}
+                    </div>
+                <Container>
+                    <Row >{ this.state.punkt.map((a) =>  <Col   ><ListElement a={a} id={a.itId} />
+                    </Col> )}</Row>
                 </Container>
 
 

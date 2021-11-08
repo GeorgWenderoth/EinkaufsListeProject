@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useState } from "react";
-import {Col} from "react-bootstrap";
+import {Col, Row} from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
+import "./Styles.scss";
 
 export function ListElement(props) {
     const [amount, setAmount] = useState(props.a.amount);
@@ -60,7 +61,9 @@ export function ListElement(props) {
     }
 
     return(
-        <div  key={props.a.itId.toString()}>
+
+
+        <div className="element"  key={props.a.itId.toString()}>
             <button><FontAwesomeIcon className="form-icon" icon={faPen}/></button>
             {props.a.einkaufsPunkt}
 

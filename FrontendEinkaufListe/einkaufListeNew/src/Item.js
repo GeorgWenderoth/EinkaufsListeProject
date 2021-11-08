@@ -1,5 +1,5 @@
 /*import React from "react";
-//import "./Item.css";
+//import "./Item.scss";
 
 const Item = ({id, items, list, setList, complete}) => {
     const remove = (id) => {
@@ -40,7 +40,7 @@ const Item = ({id, items, list, setList, complete}) => {
  */
 
 import React from "react";
-import "./Item.css";
+import "./Item.scss";
 
 const Item = ({ id, item, list, setList, complete }) => {
     const remove = (id) => {
