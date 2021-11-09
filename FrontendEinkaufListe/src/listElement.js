@@ -1,12 +1,13 @@
 import axios from 'axios';
 import React, { useState } from "react";
-import {Col, Row} from "react-bootstrap";
+import {Col, Row, Card, Button} from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import "./Styles.scss";
 
 export function ListElement(props) {
     const [amount, setAmount] = useState(props.a.amount);
+    //const [bearbeiten, setBearbeiten] = useState(true);
     //setAmount(props.a.amount);
 
    /* useEffect(() => {
@@ -46,6 +47,7 @@ export function ListElement(props) {
     }
 
    const handleDurchstreichen =(a)=>{
+       console.log("card or box klicked: " + a);
         axios({
             method: 'put',
             url: 'http://127.0.0.1:8081/einkaufsListeDurchgestrichen',
@@ -60,16 +62,42 @@ export function ListElement(props) {
 
     }
 
+   const handleBearbeiten =(a)=> {
+       console.log("Bearbeiten: " + props.a.bearbeiten)
+
+       axios({
+           method: 'put',
+           url: 'http://127.0.0.1:8081/einkaufsListeBearbeiten',
+           data: {
+               "itId": a,
+               "einkaufsPunkt": "platzhalterdatenloeschen",
+               "strich": true,
+               "amount": 1,
+               "bearbeiten": false
+
+           },
+       })
+   }
+
     return(
 
 
-        <div className="element"  key={props.a.itId.toString()}>
-            <button><FontAwesomeIcon className="form-icon" icon={faPen}/></button>
-            {props.a.einkaufsPunkt}
+        <Card  className="cardStyle" style={{ width: '300px', height: '300px',  backgroundColor: 'darkred' , border: '3px red', cursor: "pointer" }}  key={props.a.itId.toString()}>
+            <div className="buttonHull">  <Button onClick={(e ) => handleBearbeiten(props.a.itId)} className="bearbeitungsButton"><FontAwesomeIcon className="form-icon" icon={faPen}/></Button> </div>
 
-            <input type="number" value={amount} onChange={(e) => handleNumber(e)}/>
-            <button id="e" onClick={(e) => handleButton(e)}>Loeschen</button>
-            <input type="checkbox" checked={props.a.strich}  onChange={(e) => handleDurchstreichen(props.a.itId)}  /></div>
+            <Card.Body onClick={(e) => handleDurchstreichen(props.a.itId)}>
+                <div className="logoHull">
+                    <p className="logo">{props.a.einkaufsPunkt[0]}</p></div>
+
+                <Card.Title className="text-middle">
+                    {props.a.einkaufsPunkt}
+                </Card.Title>
+                <input style={{display:  props.a.bearbeiten ? "visible" : "none"  }} type="number" value={amount} onChange={(e) => handleNumber(e)}/>
+                <button id="e" onClick={(e) => handleButton(e)}>Loeschen</button>
+                <input type="checkbox"  checked={props.a.strich}  onChange={(e) => handleDurchstreichen(props.a.itId)}  />
+            </Card.Body>
+
+           </Card>
 
     )
 }

@@ -43,7 +43,7 @@ import React, { useState } from "react";
 
 import "./App.scss";
 
-import {Col, Container, Row} from "react-bootstrap";
+import {Col, Container, Row, Card} from "react-bootstrap";
 //import "./Styles.css";
 
 import Item from "./Item";
@@ -77,6 +77,7 @@ class App extends React.Component{ // es mit klasse versuchen
         this.state = {
             value: '',
             punkt: [],
+            punktErledigt: [],
             amount: ''
         };
         this.handleChange = this.handleChange.bind(this);
@@ -88,6 +89,7 @@ class App extends React.Component{ // es mit klasse versuchen
 
     componentDidMount() { //?
         this.back();
+        this.backEr();
     }
 
   //  const wertForm = null;
@@ -98,12 +100,17 @@ class App extends React.Component{ // es mit klasse versuchen
      } */
 
     back () {
-        const promise = axios.get('http://127.0.0.1:8081/einkaufsListeElemente')
+        const promise = axios.get( 'http://127.0.0.1:8081/einkaufsListeElementeNotDone'  /*'http://127.0.0.1:8081/einkaufsListeElemente' */)
         const daten = promise.then( wert => this.setState({punkt: wert.data})) //was mache ich hier genau // wert => ob.dato = wert.data
         // const daten = promise.data;
         console.log(this.state.punkt);
+    }
 
-
+    backEr () {
+        const promise = axios.get( 'http://127.0.0.1:8081/einkaufsListeElementeDone'  /*'http://127.0.0.1:8081/einkaufsListeElemente' */)
+        const daten = promise.then( wert => this.setState({punktErledigt: wert.data})) //was mache ich hier genau // wert => ob.dato = wert.data
+        // const daten = promise.data;
+        console.log(this.state.punktErledigt);
     }
 
 
@@ -201,18 +208,20 @@ class App extends React.Component{ // es mit klasse versuchen
                 <Container  >
                 <Row >{ this.state.punkt.map((a) =>  <Col   ><ListElement a={a} id={a.itId} />
                 </Col> )}</Row>
-
-
-
                 </Container>
+
                     <div>
-                        {"hallo" +
-                        ""}
+                        <p>
+                            Trennlinie
+                        </p>
                     </div>
-                <Container>
-                    <Row >{ this.state.punkt.map((a) =>  <Col   ><ListElement a={a} id={a.itId} />
+
+                <Container  >
+                    <Row >{ this.state.punktErledigt.map((a) =>  <Col   ><ListElement a={a} id={a.itId} />
                     </Col> )}</Row>
                 </Container>
+
+
 
 
 

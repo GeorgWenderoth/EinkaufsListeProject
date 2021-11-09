@@ -1,29 +1,42 @@
-body {
 
-root{
 
-  .container{
 
-    .row{
 
-      .col-md-3{
-       // height: 300px;
-        .element{
-          height: 300px;
-        }
-      }
+
+
+
+
+.cardStyle {
+  margin-bottom: 30px;
+
+
+  .logoHull{
+    display: grid;
+  .logo {
+    font-size: 500%;
+    justify-self: center;
+  }
+}
+
+
+  .buttonHull {
+    display: grid;
+
+    .bearbeitungsButton {
+      width: 50px;
+      background-color: white;
+
+      justify-self: end;
+
 
     }
   }
-
 }
 
 
-  /*.liste {
-    display: grid;
-    grid-template-columns:
-repeat(3, minmax(250px, 10fr));
 
-background-color: #61dafb;
-  } */
-}
+
+
+
+
+
