@@ -17,6 +17,24 @@
     justify-self: center;
   }
 }
+  .punktHull{
+    display: flex;
+
+    font-size: 100%;
+
+    .punkt{
+      align-self: center;
+      width: 50%;
+
+    }
+
+
+    .punktAmount{
+       width: 50%;
+      align-self: end;
+      color: green;
+    }
+  }
 
 
   .buttonHull {

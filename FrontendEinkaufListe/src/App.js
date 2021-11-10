@@ -43,7 +43,7 @@ import React, { useState } from "react";
 
 import "./App.scss";
 
-import {Col, Container, Row, Card} from "react-bootstrap";
+import {Col, Container, Row, Card, Modal} from "react-bootstrap";
 //import "./Styles.css";
 
 import Item from "./Item";
@@ -78,7 +78,8 @@ class App extends React.Component{ // es mit klasse versuchen
             value: '',
             punkt: [],
             punktErledigt: [],
-            amount: ''
+            amount: '',
+            showM: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -127,13 +128,17 @@ class App extends React.Component{ // es mit klasse versuchen
          console.log(this.state.value);
      }
 
-   handleSubmit = (event) =>{
+   handleSubmit = (event) => {
        event.preventDefault(); //event.preventDefault bei Submit behebt den fehler, eite wird nicht mehr selbstständig geladen
        const s = this.state.value.split(/(\d+)/);
-       const anzahl = s[s.length -2];
+       let anzahl = s[s.length - 2];
        console.log("split: " + anzahl);
        console.log("ar: " + s);
-       s.length =  s.length -2;
+       if (anzahl !== undefined) {
+           s.length = s.length - 2;
+       } else {
+           anzahl = 0;
+       }
 
        console.log("sL: " + s.length + "s: " +s);
         const p = s.toString();
@@ -195,10 +200,41 @@ class App extends React.Component{ // es mit klasse versuchen
 
     }
 
+    handleModal(){
+       // if(this.state.showM){
+
+      //  } else {
+            this.setState({showM: true});
+      //  }
+
+    }
+
+    closeModal(){
+        this.setState({showM: false});
+    }
+
+
+  handleDeleate (e){
+
+        e.preventDefault();
+        axios({
+            method: 'delete',
+            url: 'http://127.0.0.1:8081/einkaufssListeElementeDoneLoeschen',
+            data: {
+                "itId": 3,
+                "einkaufsPunkt": "platzhalterdatenloeschen",
+                "strich": false
+            },
+        })
+    }
+
+   // handleClose()
+
     render() {
 
         return (
             <div className="App">
+
                 <h1>Grocery List</h1>
                 <form onSubmit={this.handleSubmit}>
                     <input type="text" id="inp" value={this.state.value} onChange={this.handleChange}/>
@@ -220,6 +256,9 @@ class App extends React.Component{ // es mit klasse versuchen
                     <Row >{ this.state.punktErledigt.map((a) =>  <Col   ><ListElement a={a} id={a.itId} />
                     </Col> )}</Row>
                 </Container>
+
+
+                <button onClick={this.handleDeleate}>abgeharkte elemente Löschen</button>
 
 
 
