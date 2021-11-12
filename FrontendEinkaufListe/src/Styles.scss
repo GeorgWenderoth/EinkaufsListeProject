@@ -8,13 +8,17 @@
 
 .cardStyle {
   margin-bottom: 30px;
+  height: 180px;
+  width: 180px;
+
 
 
   .logoHull{
-    display: grid;
+    display: flex;
+
   .logo {
-    font-size: 500%;
-    justify-self: center;
+    font-size: 200%;
+    align-self: center;
   }
 }
   .punktHull{

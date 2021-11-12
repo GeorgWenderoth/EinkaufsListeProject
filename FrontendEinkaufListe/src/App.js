@@ -50,28 +50,10 @@ import Item from "./Item";
 import { v4 as uuidv4 } from "uuid";
 import {ListElement} from "./listElement";
 
-/*const arr = () => {
-  let data = localStorage.getItem("data");
-  //  return daten;
-  if (data) return JSON.parse(localStorage.getItem("data")); // local storage muss raus
-  else return [];
-}; */
-
-
-
-/*function listenpunkt(){
-    const a = this.back();
-    console.log(this.back);
-    const punkt = a.map((o) =>
-        <li>{o}</li>);
-    console.log(punkt);
-    return punkt;
-} */
 
 let ob = {}; //ist leer, render holt es sich bevor es  gefuellt ist und dato vorhanden ist
 class App extends React.Component{ // es mit klasse versuchen
- // const [item, setItem] = useState(""); // was passiet hier
- // const [list, setList] = useState(arr);
+
     constructor(props) {
         super(props);
         this.state = {
@@ -79,7 +61,8 @@ class App extends React.Component{ // es mit klasse versuchen
             punkt: [],
             punktErledigt: [],
             amount: '',
-            showM: false
+            showM: false,
+            punktTest: []
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -91,14 +74,10 @@ class App extends React.Component{ // es mit klasse versuchen
     componentDidMount() { //?
         this.back();
         this.backEr();
+        console.log(this.state.punkt, this.state.punktErledigt);
     }
 
-  //  const wertForm = null;
-/*     const handleClickEvent = () => {
-        const form = wertForm.current
-         alert(`${form['punkt'].value}`)
-         console.log(form.value);
-     } */
+
 
     back () {
         const promise = axios.get( 'http://127.0.0.1:8081/einkaufsListeElementeNotDone'  /*'http://127.0.0.1:8081/einkaufsListeElemente' */)
@@ -129,7 +108,7 @@ class App extends React.Component{ // es mit klasse versuchen
      }
 
    handleSubmit = (event) => {
-       event.preventDefault(); //event.preventDefault bei Submit behebt den fehler, eite wird nicht mehr selbstständig geladen
+      // event.preventDefault(); //event.preventDefault bei Submit behebt den fehler, eite wird nicht mehr selbstständig geladen
        const s = this.state.value.split(/(\d+)/);
        let anzahl = s[s.length - 2];
        console.log("split: " + anzahl);
@@ -137,7 +116,7 @@ class App extends React.Component{ // es mit klasse versuchen
        if (anzahl !== undefined) {
            s.length = s.length - 2;
        } else {
-           anzahl = 0;
+           anzahl = 1;
        }
 
        console.log("sL: " + s.length + "s: " +s);
@@ -200,6 +179,8 @@ class App extends React.Component{ // es mit klasse versuchen
 
     }
 
+
+
     handleModal(){
        // if(this.state.showM){
 
@@ -211,6 +192,29 @@ class App extends React.Component{ // es mit klasse versuchen
 
     closeModal(){
         this.setState({showM: false});
+    }
+
+    uebergabeMethode(id, title, harken, anzahl, notizen ){
+        console.log("parameter: " + id +" " +title + " " + anzahl + " " +notizen)
+            console.log("punkt " + this.state.punkt[0]);
+        let punkt = [...this.state.punkt];
+
+         let i = punkt.map(a=> a.itId).indexOf(id);
+    console.log("i: " + i);
+        let cPunkt = {...punkt[id]};
+           cPunkt = {
+           "itId": id,
+           "einkaufsPunkt": title,
+           "strich": harken,
+           "amount": anzahl,
+           "notizen": notizen
+       }
+
+       punkt[i] = cPunkt;
+
+       this.setState({punkt});
+
+            console.log("punktTest: " + id + " " + this.state.punkt[i].itId, this.state.punkt[i].einkaufsPunkt,this.state.punkt[i].notizen);
     }
 
 
@@ -242,7 +246,7 @@ class App extends React.Component{ // es mit klasse versuchen
                 </form>
 
                 <Container  >
-                <Row >{ this.state.punkt.map((a) =>  <Col   ><ListElement a={a} id={a.itId} />
+                <Row >{ this.state.punkt.map((a) =>  <Col   ><ListElement a={a} id={a.itId} b={(id, title, harken, anzahl, notizen)=>this.uebergabeMethode(id, title, harken, anzahl, notizen)}  />
                 </Col> )}</Row>
                 </Container>
 

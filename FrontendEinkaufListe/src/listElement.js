@@ -9,7 +9,10 @@ export function ListElement(props) {
     const [amount, setAmount] = useState(props.a.amount);
     const [showM, setShowM] = useState(false);
     const [titel, setTitel] = useState(props.a.einkaufsPunkt)
-    const [notes, setNotes] = useState("Notizen");
+    const [notes, setNotes] = useState(props.a.notizen === undefined ? 'notizen' : props.a.notizen);
+    const [colour, setColour] = useState(props.a.strich ? "darkgreen" : "darkred");
+    const [displayButton, setDisplayButton] = useState(props.a.strich ? "none" : "visible");
+
     //const [bearbeiten, setBearbeiten] = useState(true);
     //setAmount(props.a.amount);
 
@@ -65,6 +68,8 @@ export function ListElement(props) {
             },
         })
 
+       window.location.reload(false);
+
     }
 
    const handleBearbeiten =(a)=> {
@@ -85,6 +90,7 @@ export function ListElement(props) {
    }
 
   const handleClose = () => {
+        console.log("notizen: " + notes);
       axios({
           method: 'put',
           url: 'http://127.0.0.1:8081/einkaufsListeUpdateM',
@@ -93,26 +99,40 @@ export function ListElement(props) {
               "einkaufsPunkt": titel,
               "strich": false,
               "amount": amount,
+              "notizen": notes
           },
 
       })
+
+      props.b(props.a.itId, titel,false, amount, notes);
        setShowM(false);
+
+       //window.location.reload(false);
   }
+
+  const handleColour = () => {
+       if (props.a.strich){
+
+       }
+  }
+
 
   // const handleClose = () => setShowM(false);
    const handleShow = () => setShowM(true);
    const handleText = (e) => setTitel(e.target.value);
-
+   const handleNotes = (e) => setNotes(e.target.value)
+    const handleGreen = () => setColour("green")
     return(
-<div>
 
-        <Card  className="cardStyle" style={{ width: '300px', height: '300px',  backgroundColor: 'darkred' , border: '3px red', cursor: "pointer" }}  key={props.a.itId.toString()}>
-            <div className="buttonHull">  <Button onClick={handleShow} className="bearbeitungsButton"><FontAwesomeIcon className="form-icon" icon={faPen}/></Button> </div>
+
+        <Card  className="cardStyle"  style={{ /*width: '300px', height: '300px',*/  backgroundColor: colour , border: '3px red', cursor: "pointer" }}  key={props.a.itId.toString()}>
+            <div className="buttonHull">
+                <Button style={{display: displayButton}} onClick={handleShow} className="bearbeitungsButton"><FontAwesomeIcon className="form-icon" icon={faPen}/></Button> </div>
             <Modal show={showM} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title><input type="text" onChange={handleText} value={titel}/></Modal.Title>
                 </Modal.Header>
-                <Modal.Body>{notes}</Modal.Body>
+                <Modal.Body><input type="text" onChange={handleNotes} value={notes}/></Modal.Body>
                 <input type="number" value={amount} onChange={(e) => handleNumber(e)}/>
             </Modal>
             <Card.Body onClick={(e) => handleDurchstreichen(props.a.itId)}>
@@ -120,15 +140,16 @@ export function ListElement(props) {
                     <p className="logo">{props.a.einkaufsPunkt[0]}</p>
                 </div>
 
+
                     <div className="punktHull">
                         <p className="punkt">{props.a.einkaufsPunkt}</p> <p className="punktAmount">{props.a.amount}</p>
                     </div>
-               // <button id="e" onClick={(e) => handleButton(e)}>Loeschen</button>
-                <input type="checkbox"  checked={props.a.strich}  onChange={(e) => handleDurchstreichen(props.a.itId)}  />
+
+
             </Card.Body>
 
            </Card>
-</div>
+
 
 
 
