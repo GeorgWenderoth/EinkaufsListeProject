@@ -5,7 +5,6 @@
 
 
 
-
 .cardStyle {
   margin-bottom: 30px;
   height: 180px;
@@ -13,12 +12,16 @@
 
 
 
-  .logoHull{
-    display: flex;
 
+
+
+  .logoHull{
+    //display: flex;
+   // flex-direction: row;
   .logo {
-    font-size: 200%;
-    align-self: center;
+    font-size: 300%;
+    text-align: center;
+
   }
 }
   .punktHull{
@@ -46,13 +49,28 @@
 
     .bearbeitungsButton {
       width: 50px;
-      background-color: white;
-
+      background-color: darkred;
+      border-color: darkred;
       justify-self: end;
 
 
     }
   }
+}
+
+.cardColourRed{
+  background-color: darkred;
+}
+.cardColourRed:hover{
+  background-color: darkgreen;
+}
+
+.cardColourGreen{
+  background-color: darkgreen;
+}
+
+.cardColourGreen:hover{
+  background-color: darkred;
 }
 
 

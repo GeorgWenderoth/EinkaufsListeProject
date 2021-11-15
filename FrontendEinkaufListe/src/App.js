@@ -198,7 +198,6 @@ class App extends React.Component{ // es mit klasse versuchen
         console.log("parameter: " + id +" " +title + " " + anzahl + " " +notizen)
             console.log("punkt " + this.state.punkt[0]);
         let punkt = [...this.state.punkt];
-
          let i = punkt.map(a=> a.itId).indexOf(id);
     console.log("i: " + i);
         let cPunkt = {...punkt[id]};
@@ -209,11 +208,8 @@ class App extends React.Component{ // es mit klasse versuchen
            "amount": anzahl,
            "notizen": notizen
        }
-
        punkt[i] = cPunkt;
-
        this.setState({punkt});
-
             console.log("punktTest: " + id + " " + this.state.punkt[i].itId, this.state.punkt[i].einkaufsPunkt,this.state.punkt[i].notizen);
     }
 

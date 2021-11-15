@@ -12,7 +12,7 @@ export function ListElement(props) {
     const [notes, setNotes] = useState(props.a.notizen === undefined ? 'notizen' : props.a.notizen);
     const [colour, setColour] = useState(props.a.strich ? "darkgreen" : "darkred");
     const [displayButton, setDisplayButton] = useState(props.a.strich ? "none" : "visible");
-
+    const [displayColour, setDisplayColour] = useState(props.a.strich);
     //const [bearbeiten, setBearbeiten] = useState(true);
     //setAmount(props.a.amount);
 
@@ -125,7 +125,7 @@ export function ListElement(props) {
     return(
 
 
-        <Card  className="cardStyle"  style={{ /*width: '300px', height: '300px',*/  backgroundColor: colour , border: '3px red', cursor: "pointer" }}  key={props.a.itId.toString()}>
+        <Card  className={"cardStyle " +  (displayColour ? 'cardColourGreen' : 'cardColourRed')} style={{ /*backgroundColor: colour , */  border: '3px red', cursor: "pointer"  }}  key={props.a.itId.toString()}>
             <div className="buttonHull">
                 <Button style={{display: displayButton}} onClick={handleShow} className="bearbeitungsButton"><FontAwesomeIcon className="form-icon" icon={faPen}/></Button> </div>
             <Modal show={showM} onHide={handleClose}>
@@ -137,7 +137,7 @@ export function ListElement(props) {
             </Modal>
             <Card.Body onClick={(e) => handleDurchstreichen(props.a.itId)}>
                 <div className="logoHull">
-                    <p className="logo">{props.a.einkaufsPunkt[0]}</p>
+                    <p className="logo">{props.a.einkaufsPunkt[0].toUpperCase()}</p>
                 </div>
 
 
