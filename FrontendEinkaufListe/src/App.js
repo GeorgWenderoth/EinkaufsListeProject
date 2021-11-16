@@ -44,7 +44,7 @@ import React, { useState } from "react";
 import "./App.scss";
 
 import {Col, Container, Row, Card, Modal} from "react-bootstrap";
-//import "./Styles.css";
+import "./Styles.scss";
 
 import Item from "./Item";
 import { v4 as uuidv4 } from "uuid";
@@ -234,36 +234,29 @@ class App extends React.Component{ // es mit klasse versuchen
 
         return (
             <div className="App">
-
-                <h1>Grocery List</h1>
-                <form onSubmit={this.handleSubmit}>
-                    <input type="text" id="inp" value={this.state.value} onChange={this.handleChange}/>
-                    <input type="submit" value="Button"/>
-                </form>
-
-                <Container  >
-                <Row >{ this.state.punkt.map((a) =>  <Col   ><ListElement a={a} id={a.itId} b={(id, title, harken, anzahl, notizen)=>this.uebergabeMethode(id, title, harken, anzahl, notizen)}  />
-                </Col> )}</Row>
+                <div className="header">
+                    <h1 className="ueberschrift">Grocery List</h1>
+                    <form className="addButton" onSubmit={this.handleSubmit}>
+                        <input type="text" id="inp" value={this.state.value} onChange={this.handleChange}/>
+                        <input type="submit" value="Button"/>
+                    </form>
+                </div>
+                <Container className="container">
+                    <div className="reihe d-flex justify-content-center" >
+                        <div >
+                        { this.state.punkt.map((a) =>  <ListElement a={a} id={a.itId} b={(id, title, harken, anzahl, notizen)=>this.uebergabeMethode(id, title, harken, anzahl, notizen)}/>  )}
+                 </div> </div>
                 </Container>
-
-                    <div>
-                        <p>
-                            Trennlinie
-                        </p>
-                    </div>
-
-                <Container  >
-                    <Row >{ this.state.punktErledigt.map((a) =>  <Col   ><ListElement a={a} id={a.itId} />
+                <div>
+                    <p>
+                        Trennlinie
+                    </p>
+                </div>
+                <Container className="container" >
+                    <Row className="reihe">{ this.state.punktErledigt.map((a) =>  <Col   ><ListElement a={a} id={a.itId} />
                     </Col> )}</Row>
                 </Container>
-
-
                 <button onClick={this.handleDeleate}>abgeharkte elemente Löschen</button>
-
-
-
-
-
             </div>
         )
     }

@@ -1,77 +1,159 @@
 
+@import "App";
 
 
+.header{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 
-
-
-
-.cardStyle {
-  margin-bottom: 30px;
-  height: 180px;
-  width: 180px;
-
-
-
-
-
-
-  .logoHull{
-    //display: flex;
-   // flex-direction: row;
-  .logo {
-    font-size: 300%;
-    text-align: center;
-
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 40px;
+  background-color: orange;
+  .ueberschrift{
+    align-self: center;
   }
-}
-  .punktHull{
-    display: flex;
-
-    font-size: 100%;
-
-    .punkt{
-      align-self: center;
-      width: 50%;
-
-    }
-
-
-    .punktAmount{
-       width: 50%;
-      align-self: end;
-      color: green;
-    }
-  }
-
-
-  .buttonHull {
-    display: grid;
-
-    .bearbeitungsButton {
-      width: 50px;
-      background-color: darkred;
-      border-color: darkred;
-      justify-self: end;
-
-
-    }
+  .addButton{
+    align-self: center;
   }
 }
 
-.cardColourRed{
-  background-color: darkred;
-}
-.cardColourRed:hover{
-  background-color: darkgreen;
-}
+.container {
+  //margin-right: 0;
+  //margin-left: 0;
+  max-width: 100%; //max-width
+  padding: 0;
+  display: grid;
 
-.cardColourGreen{
-  background-color: darkgreen;
-}
+  .reihe {
+   // width: 100%;
+    margin: 0;
+    width: 100%;
+   // width: calc(100vw / 190);
+    //width:  calc((100vw / 190)  );
 
-.cardColourGreen:hover{
-  background-color: darkred;
-}
+
+
+
+
+    .col {
+      margin: 0px;
+      padding: 0px;
+
+      flex: 0 0;
+      justify-self: center;
+    }
+      .cardStyle {
+        padding: 0px;
+      }
+
+      .cardStyle {
+        margin: 5px;
+        height: 180px;
+        width: 180px;
+
+
+        @include media-breakpoint-down(sm) {
+          height: 120px;
+          width: 120px;
+        }
+
+
+        .logoHull {
+          //display: flex;
+          // flex-direction: row;
+          .logo {
+            font-size: 500%;
+            text-align: center;
+            font-weight: bold;
+            font-family: Arial;
+            margin-bottom: 0;
+            @include media-breakpoint-down(sm) {
+              font-size: 300%;
+              margin-bottom: 0;
+            }
+            // font-style: normal;
+
+          }
+        }
+
+        .card-body {
+          padding-bottom: 0;
+
+          .punktHull {
+            display: flex;
+
+            font-size: 100%;
+            @include media-breakpoint-down(sm) {
+              //flex-direction: column;
+            }
+
+            .punkt {
+              align-self: center;
+              width: 50%;
+              font-family: Arial;
+
+              @include media-breakpoint-down(sm) {
+                font-size: 10px;
+                margin-bottom: 0;
+
+              }
+            }
+
+
+            .punktAmount {
+              width: 50%;
+              align-self: end;
+              color: green;
+              @include media-breakpoint-down(sm) {
+                font-size: 10px;
+                margin-bottom: 0;
+
+              }
+            }
+          }
+        }
+
+
+        .buttonHull {
+          display: grid;
+
+          .bearbeitungsButton {
+            width: 50px;
+            background-color: transparent;
+            border-color: transparent;
+            justify-self: end;
+            position: absolute;
+            top: 0;
+            right: 0;
+
+
+          }
+        }
+      }
+
+      .cardColourRed {
+        background-color: darkred;
+      }
+
+      .cardColourRed:hover {
+        background-color: darkgreen;
+      }
+
+      .cardColourGreen {
+        background-color: darkgreen;
+        //padding-top: 40px; // damit des in der mitte ist, pc only? nicht responsive
+      }
+
+      .cardColourGreen:hover {
+        background-color: darkred;
+      }
+
+    }
+
+  }
+
 
 
 
