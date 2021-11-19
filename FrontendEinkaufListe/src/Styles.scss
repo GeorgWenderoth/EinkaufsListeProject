@@ -1,6 +1,10 @@
 
 @import "App";
 
+.App{
+  background-color: #293133;
+  font-family: Arial;
+}
 
 .header{
   width: 100%;
@@ -10,7 +14,7 @@
   padding-top: 20px;
   padding-bottom: 20px;
   margin-bottom: 40px;
-  background-color: orange;
+  background-color: teal;
   .ueberschrift{
     align-self: center;
   }
@@ -19,12 +23,30 @@
   }
 }
 
+.schrift{
+  font-family: Arial;
+}
+
+.loeschButtonDiv{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+
+  .loeschButton{
+
+  }
+
+
+}
+
 .container {
   //margin-right: 0;
   //margin-left: 0;
   max-width: 100%; //max-width
   padding: 0;
   display: grid;
+  //background-color: #293133;
 
   .reihe {
    // width: 100%;
@@ -32,6 +54,7 @@
     width: 100%;
    // width: calc(100vw / 190);
     //width:  calc((100vw / 190)  );
+
 
 
 
@@ -45,10 +68,11 @@
       justify-self: center;
     }
       .cardStyle {
-        padding: 0px;
+
       }
 
       .cardStyle {
+        padding: 0;
         margin: 5px;
         height: 180px;
         width: 180px;
@@ -68,6 +92,10 @@
             text-align: center;
             font-weight: bold;
             font-family: Arial;
+            line-height: normal;
+            text-transform: uppercase;
+
+            color: rgba(#ffffff,0.4);
             margin-bottom: 0;
             @include media-breakpoint-down(sm) {
               font-size: 300%;
@@ -83,7 +111,7 @@
 
           .punktHull {
             display: flex;
-
+              flex-direction: column;
             font-size: 100%;
             @include media-breakpoint-down(sm) {
               //flex-direction: column;
@@ -91,11 +119,15 @@
 
             .punkt {
               align-self: center;
-              width: 50%;
+              width: 100%;
               font-family: Arial;
+              margin-bottom: 0;
+              font-weight: bold;
+              font-size: 18px;
+
 
               @include media-breakpoint-down(sm) {
-                font-size: 10px;
+                font-size: 12px;
                 margin-bottom: 0;
 
               }
@@ -103,11 +135,14 @@
 
 
             .punktAmount {
-              width: 50%;
+              font-family: Arial;
+              width: 100%;
               align-self: end;
-              color: green;
+              color: white;
+              margin-bottom: 0;
+              font-size: 18px;
               @include media-breakpoint-down(sm) {
-                font-size: 10px;
+                font-size: 12px;
                 margin-bottom: 0;
 
               }
@@ -118,41 +153,46 @@
 
         .buttonHull {
           display: grid;
-
           .bearbeitungsButton {
-            width: 50px;
             background-color: transparent;
             border-color: transparent;
             justify-self: end;
             position: absolute;
             top: 0;
             right: 0;
-
-
           }
         }
       }
 
       .cardColourRed {
-        background-color: darkred;
+        background-color: #bc4040 //darkred;  #bc4040
       }
 
       .cardColourRed:hover {
-        background-color: darkgreen;
+        background-color: teal;//darkgreen;
       }
 
       .cardColourGreen {
-        background-color: darkgreen;
+        background-color: teal;//darkgreen;
         //padding-top: 40px; // damit des in der mitte ist, pc only? nicht responsive
       }
 
       .cardColourGreen:hover {
-        background-color: darkred;
+        background-color: #bc4040;//darkred;
       }
 
     }
 
+
+
+  /*.reihe:after{
+    content: "";
+    flex: auto;
+
+  } */
+
   }
+
 
 
 
