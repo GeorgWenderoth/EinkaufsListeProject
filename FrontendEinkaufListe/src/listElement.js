@@ -14,45 +14,11 @@ export function ListElement(props) {
     const [colour, setColour] = useState(props.a.strich ? "darkgreen" : "darkred");
     const [displayButton, setDisplayButton] = useState(props.a.strich ? "none" : "visible");
     const [displayColour, setDisplayColour] = useState(props.a.strich);
-    //const [bearbeiten, setBearbeiten] = useState(true);
-    //setAmount(props.a.amount);
-
-    /* useEffect(() => {
-
-     }) */
 
     const handleNumber = (e) => {
         setAmount(e.target.value);
         console.log("nummber: " + e + "id: " + props.a.itId);
-        //e.preventDefault();
-        /* axios({
-             method: 'put',
-             url: 'http://127.0.0.1:8081/einkaufsListeAnzahlAendern',
-             data: {
-                 "itId": props.a.itId,
-                 "einkaufsPunkt": "platzhalterdatenloeschen",
-                 "strich": false,
-                 "amount": e.target.value,
-             },
-
-         }) */
     }
-
-    const handleButton = (e) => {
-        console.log("löschid: " + props.a.itId);
-        e.preventDefault();
-        axios({
-            method: 'delete',
-            url: 'http://127.0.0.1:8081/einkaufsListeElementLoeschen',
-            data: {
-                "itId": props.a.itId,
-                "einkaufsPunkt": "platzhalterdatenloeschen",
-                "strich": false,
-                "amount": 1
-            },
-        })
-    }
-
 
     const handleDurchstreichen = (a) => {
         console.log("card or box klicked: " + a);
@@ -72,23 +38,6 @@ export function ListElement(props) {
 
     }
 
-    const handleBearbeiten = (a) => {
-        console.log("Bearbeiten: " + props.a.bearbeiten)
-
-        axios({
-            method: 'put',
-            url: 'http://127.0.0.1:8081/einkaufsListeBearbeiten',
-            data: {
-                "itId": a,
-                "einkaufsPunkt": "platzhalterdatenloeschen",
-                "strich": true,
-                "amount": 1,
-                "bearbeiten": false
-
-            },
-        })
-    }
-
     const handleClose = () => {
         console.log("notizen: " + notes);
         axios({
@@ -101,13 +50,10 @@ export function ListElement(props) {
                 "amount": amount,
                 "notizen": notes
             },
-
         })
 
         props.b(props.a.itId, titel, false, amount, notes);
         setShowM(false);
-
-        //window.location.reload(false);
     }
 
     const handleCloseWithoutSaving = () => {
@@ -118,31 +64,15 @@ export function ListElement(props) {
         setAmount(props.a.amount);
     }
 
-    const handleColour = () => {
-        if (props.a.strich) {
 
-        }
-    }
-
-
-    // const handleClose = () => setShowM(false);
     const handleShow = () => setShowM(true);
     const handleText = (e) => setTitel(e.target.value);
     const handleNotes = (e) => setNotes(e.target.value)
-    const handleGreen = () => setColour("green");
-    const handleLogo = () => {
-        if(props.a.einkaufsPunkt[0]){
-           return props.a.einkaufsPunkt[0].toUpperCase();
-        } else {
-            return props.a.einkaufsPunkt[0];
-        }
 
-    }
     return (
 
-
         <Card className={"cardStyle " + (displayColour ? 'cardColourGreen' : 'cardColourRed')}
-              style={{ /*backgroundColor: colour , */  border: '3px red', cursor: "pointer"}}
+              style={{border: '3px red', cursor: "pointer"}}
               key={props.a.itId.toString()}>
             <div className="buttonHull">
                 <Button style={{display: displayButton}} onClick={handleShow}
@@ -151,7 +81,7 @@ export function ListElement(props) {
             <Modal show={showM} onHide={handleCloseWithoutSaving}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                       Bearbeite Einkaufspunkt
+                        Bearbeite Einkaufspunkt
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -170,7 +100,6 @@ export function ListElement(props) {
                                        onChange={handleNotes}
                                        value={notes}/>
                             </div>
-
                         </div>
                         <div className="row">
                             <label className=" col-3 col-form-label">Anzahl: </label>
@@ -181,7 +110,8 @@ export function ListElement(props) {
                         </div>
                     </div>
                 </Modal.Body>
-                <Modal.Footer><Button variant="secondary" size="sm" onClick={handleCloseWithoutSaving}>Abbrechen</Button>
+                <Modal.Footer><Button variant="secondary" size="sm"
+                                      onClick={handleCloseWithoutSaving}>Abbrechen</Button>
                     <Button variant="primary" size="sm" onClick={handleClose}>Änderung Speichern</Button></Modal.Footer>
 
             </Modal>
@@ -200,8 +130,6 @@ export function ListElement(props) {
 
         </Card>
 
-
     )
 }
 
-// onClick={(e ) => handleBearbeiten(props.a.itId)}  alter bearbeitungs button stift number distplay

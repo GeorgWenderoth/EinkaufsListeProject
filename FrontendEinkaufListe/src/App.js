@@ -1,55 +1,11 @@
-/*import React, { useState } from "react";
-import "./App.css"
-import { v4 as uuidv4 } from "uuid";
-import Item from "./Item";
-
-function App() {
-  const [item, setItem] = useState(""); // was mache ich hier
-  const [list, setList] = useState([]);
-
-  const handleSubmit = (e) => {  // was macht e (eingabe?)
-    const newItem = {
-      id: uuidv4(), //generiert neine unice id
-      item: item,
-      complete: false,
-    };
-    e.preventDefault();
-    if (item) {
-      setList([...list, newItem]);
-      setItem("");
-    }
-  };
-
-  const handleChange = (e) => {
-    setItem(e.target.value);
-  };
-
-  return (
-      <div className="App">
-        <h1>Grocery List</h1>
-        <form onSubmit={handleSubmit}>
-          <input type="text" value={item} onChange={handleChange} />
-          <button type="submit">ADD</button>
-        </form>
-      </div>
-  );
-}
-
-export default App;
-*/
-
 import axios from 'axios';
-import React, { useState } from "react";
+import React, {useState} from "react";
 
 import "./App.scss";
 
 import {Col, Container, Row, Card, Modal, Button} from "react-bootstrap";
 import "./Styles.scss";
-
-import Item from "./Item";
-import { v4 as uuidv4 } from "uuid";
 import {ListElement} from "./listElement";
-
 
 let ob = {}; //ist leer, render holt es sich bevor es  gefuellt ist und dato vorhanden ist
 class App extends React.Component { // es mit klasse versuchen
@@ -93,48 +49,55 @@ class App extends React.Component { // es mit klasse versuchen
     handleSubmit = (event) => {
         // event.preventDefault(); //event.preventDefault bei Submit behebt den fehler, eite wird nicht mehr selbstständig geladen
         if (this.state.value !== "") {
-         let trim = this.state.value.trim();
-            console.log("target:" + event.target[0].value +":");
-        const s = trim.split(/(\d+)/);
-        console.log("länge Splitt: " + s.length + ", letztes element:" + s[s.length-1] + ":");
-            console.log("gespliteter String:" + s +":");
+            let trim = this.state.value.trim();
+            console.log("target:" + event.target[0].value + ":");
+            const split = trim.split(/(\d+)/);
+            console.log("länge Splitt: " + split.length + ", letztes element:" + split[split.length - 1] + ":");
+            console.log("gespliteter String:" + split + ":");
             let anzahl;
-            if(s[s.length-1] === ""){
-                anzahl = s[s.length - 2];
-                s.length = s.length - 2;
+            if (split[split.length - 1] === "") {
+                anzahl = split[split.length - 2];
+                split.length = split.length - 2;
 
             } else {
                 anzahl = 1;
             }
             console.log("anzahl: " + anzahl);
+            if (split[0] === "") {
 
-            if(s[0] === ""){
-
-            let a = s.shift();
-                console.log("index 0 Soll removed werden:" +a +": " + s );
+                let a = split.shift();
+                console.log("index 0 Soll removed werden:" + a + ": " + split);
             }
-
-        console.log("länge ohne amount: " + s.length + " ohne amount:" + s + ":");
-        let p = s.toString();
-        p = p.replace(/,/g, '');
-        console.log("p: " + p);
-
-
-       axios({
-            method: 'post',
-            url: 'http://127.0.0.1:8081/einkaufsListe',
-            data: {
+            console.log("länge ohne amount: " + split.length + " ohne amount:" + split + ":");
+            let einkaufsPunkt = split.toString();
+            einkaufsPunkt = einkaufsPunkt.replace(/,/g, '');
+            console.log("p: " + einkaufsPunkt);
+            let cPunkt = {
                 "itId": 100,
-                "einkaufsPunkt": p,
+                "einkaufsPunkt": einkaufsPunkt,
                 "strich": false,
                 "amount": anzahl,
-            },
-        })
+            }
+            let punkt = this.state.punkt;
+            punkt.push(cPunkt);
+            this.setState({punkt});
+
+            axios({
+                method: 'post',
+                url: 'http://127.0.0.1:8081/einkaufsListe',
+                data: {
+                    "itId": 100,
+                    "einkaufsPunkt": einkaufsPunkt,
+                    "strich": false,
+                    "amount": anzahl,
+                },
+            })
+        }
     }
-}
-    handleNumber(a,e){
+
+    handleNumber(a, e) {
         this.setState({amount: e.target.value});
-        console.log("nummber: " +e.target.value);
+        console.log("nummber: " + e.target.value);
         e.preventDefault();
         axios({
             method: 'put',
@@ -148,9 +111,9 @@ class App extends React.Component { // es mit klasse versuchen
         })
     }
 
-    handleButton(a,e){
+    handleButton(a, e) {
         console.log(a);
-       e.preventDefault();
+        e.preventDefault();
         axios({
             method: 'delete',
             url: 'http://127.0.0.1:8081/einkaufsListeElementLoeschen',
@@ -162,7 +125,7 @@ class App extends React.Component { // es mit klasse versuchen
         })
     }
 
-    handleDurchstreichen(a){
+    handleDurchstreichen(a) {
         axios({
             method: 'put',
             url: 'http://127.0.0.1:8081/einkaufsListeDurchgestrichen',
@@ -174,27 +137,26 @@ class App extends React.Component { // es mit klasse versuchen
         })
     }
 
-
-    uebergabeMethode(id, title, harken, anzahl, notizen ){
-        console.log("parameter: " + id +" " +title + " " + anzahl + " " +notizen)
-            console.log("punkt " + this.state.punkt[0]);
+    uebergabeMethode(id, title, harken, anzahl, notizen) {
+        console.log("parameter: " + id + " " + title + " " + anzahl + " " + notizen)
+        console.log("punkt " + this.state.punkt[0]);
         let punkt = [...this.state.punkt];
-         let i = punkt.map(a=> a.itId).indexOf(id);
-    console.log("i: " + i);
+        let i = punkt.map(a => a.itId).indexOf(id);
+        console.log("i: " + i);
         let cPunkt = {...punkt[id]};
-           cPunkt = {
-           "itId": id,
-           "einkaufsPunkt": title,
-           "strich": harken,
-           "amount": anzahl,
-           "notizen": notizen
-       }
-       punkt[i] = cPunkt;
-       this.setState({punkt});
-            console.log("punktTest: " + id + " " + this.state.punkt[i].itId, this.state.punkt[i].einkaufsPunkt,this.state.punkt[i].notizen);
+        cPunkt = {
+            "itId": id,
+            "einkaufsPunkt": title,
+            "strich": harken,
+            "amount": anzahl,
+            "notizen": notizen
+        }
+        punkt[i] = cPunkt;
+        this.setState({punkt});
+        console.log("punktTest: " + id + " " + this.state.punkt[i].itId, this.state.punkt[i].einkaufsPunkt, this.state.punkt[i].notizen);
     }
 
-  handleDeleate (e){
+    handleDeleate(e) {
 
         e.preventDefault();
         axios({
@@ -206,18 +168,19 @@ class App extends React.Component { // es mit klasse versuchen
                 "strich": false
             },
         })
-      window.location.reload(false);
+        window.location.reload(false);
     }
 
     render() {
-
         return (
             <div className="App">
                 <div className="header">
                     <h1 className="ueberschrift">Digitale Einkaufsliste</h1>
-                    <form  className="row g-3 justify-content-center"/*className="addButton"*/ onSubmit={this.handleSubmit}>
+                    <form className="row g-3 justify-content-center"/*className="addButton"*/
+                          onSubmit={this.handleSubmit}>
                         <div className="col-auto">
-                            <input className="form-control" type="text" id="inp" placeholder="Einkaufspunkt" value={this.state.value} onChange={this.handleChange}/>
+                            <input className="form-control" type="text" id="inp" placeholder="Einkaufspunkt"
+                                   value={this.state.value} onChange={this.handleChange}/>
                         </div>
                         <div className="col-auto">
                             <Button type="submit" className="btn-secondary">Hinzufügen</Button>
@@ -232,12 +195,10 @@ class App extends React.Component { // es mit klasse versuchen
 
                 <Container className="container">
                     <div className="d-flex justify-content-center">
-                    <div className="d-flex flex-wrap  justify-content-center reihe">
-
-                        { this.state.punkt.map((a) =>  <ListElement a={a} id={a.itId} b={(id, title, harken, anzahl, notizen)=>this.uebergabeMethode(id, title, harken, anzahl, notizen)}/>  )}
-
-                    </div>
-
+                        <div className="d-flex flex-wrap  justify-content-center reihe">
+                            {this.state.punkt.map((a) => <ListElement a={a} id={a.itId}
+                                                                      b={(id, title, harken, anzahl, notizen) => this.uebergabeMethode(id, title, harken, anzahl, notizen)}/>)}
+                        </div>
                     </div>
                 </Container>
                 <div className="d-flex justify-content-center">
@@ -245,21 +206,21 @@ class App extends React.Component { // es mit klasse versuchen
                         Erledigte Einkäufe
                     </p>
                 </div>
-                <Container className="container" >
+                <Container className="container">
                     <div className="d-flex justify-content-center">
-                    <div className="d-flex flex-wrap  justify-content-center reihe">{ this.state.punktErledigt.map((a) => <ListElement a={a} id={a.itId} />
-                     )}</div>
+                        <div
+                            className="d-flex flex-wrap  justify-content-center reihe">{this.state.punktErledigt.map((a) =>
+                            <ListElement a={a} id={a.itId}/>
+                        )}</div>
                     </div>
                 </Container>
-                <div className="d-flex flex-row justify-content-center  "   >
-                    <Button className=" btn-secondary btn-sm mt-4 mb-4"  onClick={this.handleDeleate}>Erledigte Einkäufe löschen</Button>
+                <div className="d-flex flex-row justify-content-center  ">
+                    <Button className=" btn-secondary btn-sm mt-4 mb-4" onClick={this.handleDeleate}>Erledigte Einkäufe
+                        löschen</Button>
                 </div>
-
-
             </div>
         )
     }
-
 }
 
 export default App;
