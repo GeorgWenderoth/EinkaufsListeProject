@@ -6,7 +6,7 @@ import "./App.scss";
 import {Col, Container, Row, Card, Modal, Button} from "react-bootstrap";
 import "./Styles.scss";
 import {ListElement} from "./listElement";
-
+import {AxiosCalls} from "./axiosCalls";
 let ob = {}; //ist leer, render holt es sich bevor es  gefuellt ist und dato vorhanden ist
 class App extends React.Component { // es mit klasse versuchen
 
@@ -28,19 +28,28 @@ class App extends React.Component { // es mit klasse versuchen
         console.log("start");
             this.back();
             this.backEr();
-
     }
 
     back() {
-        const promise = axios.get('http://127.0.0.1:8081/einkaufsListeElementeNotDone'  /*'http://127.0.0.1:8081/einkaufsListeElemente' */)
-        const daten = promise.then(wert => this.setState({punkt: wert.data})) //was mache ich hier genau // wert => ob.dato = wert.data
+        const promise = AxiosCalls('get','http://127.0.0.1:8081/einkaufsListeElementeNotDone',"NotDone");
+        promise.then(wert =>{
+            console.log("back ",wert.data );
+                this.setState({punkt: wert.data})
+        }
+        /*{if(wert.data.einkaufsPunkt === null || wert.data.einkaufsPunkt === undefined){
+            console.log("einkaufsPunkt ist Null");
+        } else {
+            console.log("einkaufsPunkt ist nicht null", wert.data.einkaufsPunkt);
+            this.setState({punkt: wert.data})
+
+        }
+        }*/ )
     }
 
     backEr() {
-        const promise = axios.get('http://127.0.0.1:8081/einkaufsListeElementeDone'  /*'http://127.0.0.1:8081/einkaufsListeElemente' */)
-        const daten = promise.then(wert => this.setState({punktErledigt: wert.data})) //was mache ich hier genau // wert => ob.dato = wert.data
+        const promise = AxiosCalls('get','http://127.0.0.1:8081/einkaufsListeElementeDone', "Done" );
+         promise.then(wert => this.setState({punktErledigt: wert.data})) //was mache ich hier genau // wert => ob.dato = wert.data
     }
-
 
     handleChange(event) {
         this.setState({value: event.target.value}) //warum geschweifte klammern
@@ -72,19 +81,19 @@ class App extends React.Component { // es mit klasse versuchen
             //console.log("länge ohne amount: " + split.length + " ohne amount:" + split + ":");
             let einkaufsPunkt = split.toString();
             einkaufsPunkt = einkaufsPunkt.replace(/,/g, '');
-           // console.log("p: " + einkaufsPunkt);
-          /*  let cPunkt = {
+            console.log("p: " + einkaufsPunkt);
+            let cPunkt = {
                 "itId": 100,
                 "einkaufsPunkt": einkaufsPunkt,
                 "strich": false,
                 "amount": anzahl,
             }
-            let punkt = [...this.state.punkt];
-            punkt.push(cPunkt);
-            console.log("punkt",punkt);
-            this.setState({punkt: punkt}); */
 
-            axios({
+           const promise = AxiosCalls('post','http://127.0.0.1:8081/einkaufsListe',cPunkt);
+
+
+
+           /* axios({
                 method: 'post',
                 url: 'http://127.0.0.1:8081/einkaufsListe',
                 data: {
@@ -93,10 +102,15 @@ class App extends React.Component { // es mit klasse versuchen
                     "strich": false,
                     "amount": anzahl,
                 },
-            }).then(item => {
+            }) */
+
+                promise.then(item => {
+                    console.log("Post then App:", item.data);
                 let punkt = [...this.state.punkt];
-                punkt.push(item.data);
+                    punkt.push(item.data);
+
                 console.log("then post", item.data.itId );
+
                 this.setState({punkt: punkt});
             });
         }
@@ -106,7 +120,14 @@ class App extends React.Component { // es mit klasse versuchen
         this.setState({amount: e.target.value});
         console.log("nummber: " + e.target.value);
         e.preventDefault();
-        axios({
+        let ob = {
+            "itId": a,
+                "einkaufsPunkt": "platzhalterdatenloeschen",
+                "strich": false,
+                "amount": e.target.value
+        }
+        AxiosCalls('put', 'http://127.0.0.1:8081/einkaufsListeAnzahlAendern', ob);
+      /*  axios({
             method: 'put',
             url: 'http://127.0.0.1:8081/einkaufsListeAnzahlAendern',
             data: {
@@ -115,7 +136,7 @@ class App extends React.Component { // es mit klasse versuchen
                 "strich": false,
                 "amount": e.target.value
             },
-        })
+        }) */
     }
 
     handleButton(a, e) {
