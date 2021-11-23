@@ -25,9 +25,10 @@ class App extends React.Component { // es mit klasse versuchen
     }
 
     componentDidMount() { //?
-        this.back();
-        this.backEr();
-        console.log(this.state.punkt, this.state.punktErledigt);
+        console.log("start");
+            this.back();
+            this.backEr();
+
     }
 
     back() {
@@ -47,13 +48,13 @@ class App extends React.Component { // es mit klasse versuchen
     }
 
     handleSubmit = (event) => {
-        // event.preventDefault(); //event.preventDefault bei Submit behebt den fehler, eite wird nicht mehr selbstständig geladen
+         event.preventDefault(); //event.preventDefault bei Submit behebt den fehler, eite wird nicht mehr selbstständig geladen
         if (this.state.value !== "") {
             let trim = this.state.value.trim();
-            console.log("target:" + event.target[0].value + ":");
+            //console.log("target:" + event.target[0].value + ":");
             const split = trim.split(/(\d+)/);
-            console.log("länge Splitt: " + split.length + ", letztes element:" + split[split.length - 1] + ":");
-            console.log("gespliteter String:" + split + ":");
+           // console.log("länge Splitt: " + split.length + ", letztes element:" + split[split.length - 1] + ":");
+          //  console.log("gespliteter String:" + split + ":");
             let anzahl;
             if (split[split.length - 1] === "") {
                 anzahl = split[split.length - 2];
@@ -62,25 +63,26 @@ class App extends React.Component { // es mit klasse versuchen
             } else {
                 anzahl = 1;
             }
-            console.log("anzahl: " + anzahl);
+           // console.log("anzahl: " + anzahl);
             if (split[0] === "") {
 
                 let a = split.shift();
-                console.log("index 0 Soll removed werden:" + a + ": " + split);
+             //   console.log("index 0 Soll removed werden:" + a + ": " + split);
             }
-            console.log("länge ohne amount: " + split.length + " ohne amount:" + split + ":");
+            //console.log("länge ohne amount: " + split.length + " ohne amount:" + split + ":");
             let einkaufsPunkt = split.toString();
             einkaufsPunkt = einkaufsPunkt.replace(/,/g, '');
-            console.log("p: " + einkaufsPunkt);
-            let cPunkt = {
+           // console.log("p: " + einkaufsPunkt);
+          /*  let cPunkt = {
                 "itId": 100,
                 "einkaufsPunkt": einkaufsPunkt,
                 "strich": false,
                 "amount": anzahl,
             }
-            let punkt = this.state.punkt;
+            let punkt = [...this.state.punkt];
             punkt.push(cPunkt);
-            this.setState({punkt});
+            console.log("punkt",punkt);
+            this.setState({punkt: punkt}); */
 
             axios({
                 method: 'post',
@@ -91,7 +93,12 @@ class App extends React.Component { // es mit klasse versuchen
                     "strich": false,
                     "amount": anzahl,
                 },
-            })
+            }).then(item => {
+                let punkt = [...this.state.punkt];
+                punkt.push(item.data);
+                console.log("then post", item.data.itId );
+                this.setState({punkt: punkt});
+            });
         }
     }
 
@@ -125,19 +132,15 @@ class App extends React.Component { // es mit klasse versuchen
         })
     }
 
-    handleDurchstreichen(a) {
-        axios({
-            method: 'put',
-            url: 'http://127.0.0.1:8081/einkaufsListeDurchgestrichen',
-            data: {
-                "itId": a,
-                "einkaufsPunkt": "platzhalterdatenloeschen",
-                "strich": false
-            },
-        })
-    }
-
-    uebergabeMethode(id, title, harken, anzahl, notizen) {
+    /**
+     * Von child to parent component, Wird im Child  listElement aufgerufen und mit de übergeben werte wird im state in ein orbjekt geupadtet
+     * @param {number} id - id des obekts fürs backend
+     * @param {string} title - einkaufsPunkt (name des Artikels)
+     * @param  harken - sind die einkaufsPunkte erledigt oder nicht
+     * @param {number} anzahl - die anzahl wie of ein arteikel gekauft werden soll
+     * @param {string} notizen - Notizen / bemerkungen zum artikel
+     */
+    updatePunktInState(id, title, harken, anzahl, notizen) {
         console.log("parameter: " + id + " " + title + " " + anzahl + " " + notizen)
         console.log("punkt " + this.state.punkt[0]);
         let punkt = [...this.state.punkt];
@@ -156,9 +159,42 @@ class App extends React.Component { // es mit klasse versuchen
         console.log("punktTest: " + id + " " + this.state.punkt[i].itId, this.state.punkt[i].einkaufsPunkt, this.state.punkt[i].notizen);
     }
 
-    handleDeleate(e) {
+    /**
+     * Updated den state wenn ein Item verschoben wird von unerledigt zu erledigt und andersherum
+     * @param id
+     * @param harken
+     */
 
-        e.preventDefault();
+    updatePunktStrichDoneOrNot(id, harken){
+        console.log("harken: " + harken);// strichw wert muss noch geändert werden.
+        let punkt = [...this.state.punkt];
+        let indexItem = punkt.map(a => a.itId).indexOf(id);
+        let punktErledigt = [...this.state.punktErledigt];
+        let indexItemErledigt = punktErledigt.map(a => a.itId).indexOf(id);
+       let speicher;
+        if(harken){
+         speicher =  punktErledigt[indexItemErledigt];
+         speicher.strich = false;
+         punktErledigt.splice(indexItemErledigt,1);
+         punkt.push(speicher)
+        } else {
+            speicher= punkt[indexItem];
+            speicher.strich = true;
+            punkt.splice(indexItem,1);
+            punktErledigt.push(speicher);
+        }
+        this.setState({punkt: punkt, punktErledigt: punktErledigt});
+    }
+
+    /**
+     *  Löscht alle erledigten Artikel /einkaufsPunkte
+     *
+     */
+    deleateAllDoneItems(){
+        //this.setState({punktErledigt: []});
+        //console.log("dealeateTest: ", this.state.punkt);
+        //e.preventDefault();
+
         axios({
             method: 'delete',
             url: 'http://127.0.0.1:8081/einkaufssListeElementeDoneLoeschen',
@@ -168,7 +204,7 @@ class App extends React.Component { // es mit klasse versuchen
                 "strich": false
             },
         })
-        window.location.reload(false);
+
     }
 
     render() {
@@ -196,8 +232,9 @@ class App extends React.Component { // es mit klasse versuchen
                 <Container className="container">
                     <div className="d-flex justify-content-center">
                         <div className="d-flex flex-wrap  justify-content-center reihe">
-                            {this.state.punkt.map((a) => <ListElement a={a} id={a.itId}
-                                                                      b={(id, title, harken, anzahl, notizen) => this.uebergabeMethode(id, title, harken, anzahl, notizen)}/>)}
+                            {this.state.punkt.map((item) => <ListElement item={item} id={item.itId}
+                                                                      updatePunkt={(id, title, harken, anzahl, notizen) => this.updatePunktInState(id, title, harken, anzahl, notizen)}
+                                                                      updateDoneOrNot={(id, harken) =>this.updatePunktStrichDoneOrNot(id,harken)}   />)}
                         </div>
                     </div>
                 </Container>
@@ -209,18 +246,18 @@ class App extends React.Component { // es mit klasse versuchen
                 <Container className="container">
                     <div className="d-flex justify-content-center">
                         <div
-                            className="d-flex flex-wrap  justify-content-center reihe">{this.state.punktErledigt.map((a) =>
-                            <ListElement a={a} id={a.itId}/>
+                            className="d-flex flex-wrap  justify-content-center reihe">{this.state.punktErledigt.map((item) =>
+                            <ListElement item={item} id={item.itId}
+                                         updateDoneOrNot={(id, harken) =>this.updatePunktStrichDoneOrNot(id,harken)}  />
                         )}</div>
                     </div>
                 </Container>
                 <div className="d-flex flex-row justify-content-center  ">
-                    <Button className=" btn-secondary btn-sm mt-4 mb-4" onClick={this.handleDeleate}>Erledigte Einkäufe
+                    <Button className=" btn-secondary btn-sm mt-4 mb-4" onClick={this.deleateAllDoneItems}>Erledigte Einkäufe
                         löschen</Button>
                 </div>
             </div>
         )
     }
 }
-
 export default App;

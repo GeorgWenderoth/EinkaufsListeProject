@@ -7,34 +7,33 @@ import "./Styles.scss";
 import "./App.scss";
 
 export function ListElement(props) {
-    const [amount, setAmount] = useState(props.a.amount);
+    const [amount, setAmount] = useState(props.item.amount);
     const [showM, setShowM] = useState(false);
-    const [titel, setTitel] = useState(props.a.einkaufsPunkt)
-    const [notes, setNotes] = useState(props.a.notizen === undefined ? 'notizen' : props.a.notizen);
-    const [colour, setColour] = useState(props.a.strich ? "darkgreen" : "darkred");
-    const [displayButton, setDisplayButton] = useState(props.a.strich ? "none" : "visible");
-    const [displayColour, setDisplayColour] = useState(props.a.strich);
+    const [titel, setTitel] = useState(props.item.einkaufsPunkt)
+    const [notes, setNotes] = useState(props.item.notizen === undefined ? 'notizen' : props.item.notizen);
+    const [colour, setColour] = useState(props.item.strich ? "darkgreen" : "darkred");
+    const [displayButton, setDisplayButton] = useState(props.item.strich ? "none" : "visible");
+    const [displayColour, setDisplayColour] = useState(props.item.strich);
 
     const handleNumber = (e) => {
         setAmount(e.target.value);
-        console.log("nummber: " + e + "id: " + props.a.itId);
+        console.log("nummber: " + e + "id: " + props.item.itId);
     }
 
-    const handleDurchstreichen = (a) => {
-        console.log("card or box klicked: " + a);
+    const handleDurchstreichen = () => {
+        console.log("card or box klicked: " + props.item.itId);
         axios({
             method: 'put',
             url: 'http://127.0.0.1:8081/einkaufsListeDurchgestrichen',
             data: {
-                "itId": a,
+                "itId": props.id,
                 "einkaufsPunkt": "platzhalterdatenloeschen",
                 "strich": false,
                 "amount": 1
 
             },
         })
-
-        window.location.reload(false);
+        props.updateDoneOrNot(props.id, props.item.strich);
 
     }
 
@@ -44,7 +43,7 @@ export function ListElement(props) {
             method: 'put',
             url: 'http://127.0.0.1:8081/einkaufsListeUpdateM',
             data: {
-                "itId": props.a.itId,
+                "itId": props.item.itId,
                 "einkaufsPunkt": titel,
                 "strich": false,
                 "amount": amount,
@@ -52,16 +51,16 @@ export function ListElement(props) {
             },
         })
 
-        props.b(props.a.itId, titel, false, amount, notes);
+        props.updatePunkt(props.item.itId, titel, false, amount, notes);
         setShowM(false);
     }
 
     const handleCloseWithoutSaving = () => {
 
         setShowM(false);
-        setTitel(props.a.einkaufsPunkt);
-        setNotes(props.a.notizen);
-        setAmount(props.a.amount);
+        setTitel(props.item.einkaufsPunkt);
+        setNotes(props.item.notizen);
+        setAmount(props.item.amount);
     }
 
 
@@ -72,8 +71,8 @@ export function ListElement(props) {
     return (
 
         <Card className={"cardStyle " + (displayColour ? 'cardColourGreen' : 'cardColourRed')}
-              style={{border: '3px red', cursor: "pointer"}}
-              key={props.a.itId.toString()}>
+              style={{border: '3px', cursor: "pointer"}}
+              key={props.item.itId.toString()}>
             <div className="buttonHull">
                 <Button style={{display: displayButton}} onClick={handleShow}
                         className="bearbeitungsButton"><FontAwesomeIcon className="form-icon" icon={faPen}/></Button>
@@ -115,14 +114,14 @@ export function ListElement(props) {
                     <Button variant="primary" size="sm" onClick={handleClose}>Änderung Speichern</Button></Modal.Footer>
 
             </Modal>
-            <Card.Body onClick={(e) => handleDurchstreichen(props.a.itId)}>
+            <Card.Body onClick={(e) => handleDurchstreichen()}>
                 <div className="logoHull">
-                    <p className="logo">{props.a.einkaufsPunkt[0]}</p>
+                    <p className="logo">{props.item.einkaufsPunkt[0]}</p>
                 </div>
 
 
                 <div className="punktHull">
-                    <p className="punkt">{props.a.einkaufsPunkt}</p> <p className="punktAmount">{props.a.amount}</p>
+                    <p className="punkt">{props.item.einkaufsPunkt}</p> <p className="punktAmount">{props.item.amount}</p>
                 </div>
 
 

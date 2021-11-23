@@ -17,6 +17,7 @@
   background-color: teal;
   .ueberschrift{
     align-self: center;
+    color: white;
   }
   .addButton{
     align-self: center;
@@ -24,7 +25,8 @@
 }
 
 .schrift{
-  font-family: Arial;
+  color: white;
+  font-family: Arial, sans-serif;
 }
 
 .loeschButtonDiv{
@@ -97,6 +99,7 @@
               margin-bottom: 0;
               font-weight: bold;
               font-size: 18px;
+              color: white;
 
               @include media-breakpoint-down(sm) {
                 font-size: 12px;
