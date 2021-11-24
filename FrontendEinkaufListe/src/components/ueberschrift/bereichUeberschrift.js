@@ -1,5 +1,5 @@
 import React from "react";
-import "./Styles.scss";
+import "../../Styles.scss";
 
 export function BereichUeberschrift(props){
 

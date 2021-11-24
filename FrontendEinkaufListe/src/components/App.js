@@ -1,17 +1,12 @@
-import axios from 'axios';
-import React, {useState} from "react";
-
+import React from "react";
 import "./App.scss";
-
-import {Col, Container, Row, Card, Modal, Button} from "react-bootstrap";
-import "../Styles.scss";
-import {ListElement} from "../listElement";
+import {Button} from "react-bootstrap";
 import {AxiosCalls} from "../utils/axiosCalls";
-import {EinkaufHeader} from "../einkaufHeader";
-import {BereichUeberschrift} from "../bereichUeberschrift";
-import {ContainerListe} from "../containerListe";
+import {EinkaufHeader} from "./header/einkaufHeader";
+import {BereichUeberschrift} from "./ueberschrift/bereichUeberschrift";
+import {ContainerListe} from "./liste/containerListe";
 
-class App extends React.Component { // es mit klasse versuchen
+class App extends React.Component {
 
     constructor(props) {
         super(props);
@@ -21,42 +16,41 @@ class App extends React.Component { // es mit klasse versuchen
             punktErledigt: [],
             amount: '',
             showM: false,
-            punktTest: []
         };
-        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount() { //?
+    componentDidMount() {
         console.log("start");
-            this.back();
-            this.backEr();
+        this.back();
+        this.backEr();
     }
 
+    /**
+     * Holt sich die Unerledigten Items vom Backend und setzt sie in state
+     */
     back() {
-        const promise = AxiosCalls('get','http://127.0.0.1:8081/einkaufsListeElementeNotDone',"NotDone");
-        promise.then(wert =>{
-            console.log("back ",wert.data );
-                this.setState({punkt: wert.data})
+        const promise = AxiosCalls('get', 'http://127.0.0.1:8081/einkaufsListeElementeNotDone', "NotDone");
+        promise.then(wert => {
+            console.log("back ", wert.data);
+            this.setState({punkt: wert.data})
         })
     }
 
+    /**
+     * Holt sich die Erledigten items vom Backend und setzt sie in state
+     */
     backEr() {
-        const promise = AxiosCalls('get','http://127.0.0.1:8081/einkaufsListeElementeDone', "Done" );
-         promise.then(wert => this.setState({punktErledigt: wert.data})) //was mache ich hier genau // wert => ob.dato = wert.data
+        const promise = AxiosCalls('get', 'http://127.0.0.1:8081/einkaufsListeElementeDone', "Done");
+        promise.then(wert => this.setState({punktErledigt: wert.data}))
     }
 
-    handleChange(event) {
-        this.setState({value: event.target.value}) //warum geschweifte klammern
-        console.log(this.state.value);
-    }
+
 
     handleSubmit = (value) => {
         if (value !== "") {
-            let trim = value.trim();
+            const trim = value.trim();
             const split = trim.split(/(\d+)/);
-           // console.log("länge Splitt: " + split.length + ", letztes element:" + split[split.length - 1] + ":");
-          //  console.log("gespliteter String:" + split + ":");
             let anzahl;
             if (split[split.length - 1] === "") {
                 anzahl = split[split.length - 2];
@@ -64,12 +58,6 @@ class App extends React.Component { // es mit klasse versuchen
             } else {
                 anzahl = 1;
             }
-           // console.log("anzahl: " + anzahl);
-            if (split[0] === "") {
-                let a = split.shift();
-             //   console.log("index 0 Soll removed werden:" + a + ": " + split);
-            }
-            //console.log("länge ohne amount: " + split.length + " ohne amount:" + split + ":");
             let einkaufsPunkt = split.toString();
             einkaufsPunkt = einkaufsPunkt.replace(/,/g, '');
             console.log("p: " + einkaufsPunkt);
@@ -80,39 +68,16 @@ class App extends React.Component { // es mit klasse versuchen
                 "amount": anzahl,
             }
 
-           const promise = AxiosCalls('post','http://127.0.0.1:8081/einkaufsListe',cPunkt);
-                promise.then(item => {
-                    console.log("App: Post .then:", item.data);
+            const promise = AxiosCalls('post', 'http://127.0.0.1:8081/einkaufsListe', cPunkt);
+            promise.then(item => {
+                console.log("App: Post .then:", item.data);
                 let punkt = [...this.state.punkt];
-                    punkt.push(item.data);
+                punkt.push(item.data);
                 this.setState({punkt: punkt});
             });
         }
     }
 
-    handleNumber(a, e) {
-        this.setState({amount: e.target.value});
-        console.log("nummber: " + e.target.value);
-        e.preventDefault();
-        let ob = {
-            "itId": a,
-                "einkaufsPunkt": "platzhalterdatenloeschen",
-                "strich": false,
-                "amount": e.target.value
-        }
-        AxiosCalls('put', 'http://127.0.0.1:8081/einkaufsListeAnzahlAendern', ob);
-    }
-
-    handleButton(a, e) {
-        console.log(a);
-        e.preventDefault();
-        const ob = {
-            "itId": a,
-            "einkaufsPunkt": "platzhalterdatenloeschen",
-            "strich": false
-        }
-        AxiosCalls('delete', 'http://127.0.0.1:8081/einkaufsListeElementLoeschen',ob);
-    }
 
     /**
      * Von child to parent component, Wird im Child  listElement aufgerufen und mit de übergeben werte wird im state in ein orbjekt geupadtet
@@ -146,23 +111,22 @@ class App extends React.Component { // es mit klasse versuchen
      * @param id
      * @param harken
      */
-
-    updatePunktStrichDoneOrNot(id, harken){
+    updatePunktStrichDoneOrNot(id, harken) {
         console.log("harken: " + harken);// strichw wert muss noch geändert werden.
         let punkt = [...this.state.punkt];
         let indexItem = punkt.map(a => a.itId).indexOf(id);
         let punktErledigt = [...this.state.punktErledigt];
         let indexItemErledigt = punktErledigt.map(a => a.itId).indexOf(id);
-       let speicher;
-        if(harken){
-         speicher =  punktErledigt[indexItemErledigt];
-         speicher.strich = false;
-         punktErledigt.splice(indexItemErledigt,1);
-         punkt.push(speicher)
+        let speicher;
+        if (harken) {
+            speicher = punktErledigt[indexItemErledigt];
+            speicher.strich = false;
+            punktErledigt.splice(indexItemErledigt, 1);
+            punkt.push(speicher)
         } else {
-            speicher= punkt[indexItem];
+            speicher = punkt[indexItem];
             speicher.strich = true;
-            punkt.splice(indexItem,1);
+            punkt.splice(indexItem, 1);
             punktErledigt.push(speicher);
         }
         this.setState({punkt: punkt, punktErledigt: punktErledigt});
@@ -170,44 +134,39 @@ class App extends React.Component { // es mit klasse versuchen
 
     /**
      *  Löscht alle erledigten Artikel /einkaufsPunkte
-     *
      */
-    deleateAllDoneItems(){
-        //this.setState({punktErledigt: []});
-        //console.log("dealeateTest: ", this.state.punkt);
-        //e.preventDefault();
+    deleateAllDoneItems() {
         const ob = {
             "itId": 3,
             "einkaufsPunkt": "platzhalterdatenloeschen",
             "strich": false
         }
-        AxiosCalls('delete','http://127.0.0.1:8081/einkaufssListeElementeDoneLoeschen',ob);
+      const response = AxiosCalls('delete', 'http://127.0.0.1:8081/einkaufssListeElementeDoneLoeschen', ob);
+        this.setState({punktErledigt: []});
     }
 
     render() {
         return (
             <div className="App">
-              <EinkaufHeader  handleSubmit={(value) =>this.handleSubmit(value)}/>
+                <EinkaufHeader handleSubmit={(value) => this.handleSubmit(value)}/>
                 <BereichUeberschrift ueberschrift={"Zu erledigende Einkäufe"}/>
-                <ContainerListe itemList={this.state.punkt} updatePunkt={(id, title, harken, anzahl, notizen) => this.updatePunktInState(id, title, harken, anzahl, notizen)}
-                                updateDoneOrNot={(id, harken) =>this.updatePunktStrichDoneOrNot(id,harken)} />
-
-
-
-
+                <ContainerListe itemList={this.state.punkt}
+                                updatePunkt={(id, title, harken, anzahl, notizen) => this.updatePunktInState(id, title, harken, anzahl, notizen)}
+                                updateDoneOrNot={(id, harken) => this.updatePunktStrichDoneOrNot(id, harken)}/>
                 <BereichUeberschrift ueberschrift={"Erledigte Einkäufe"}/>
                 <ContainerListe itemList={this.state.punktErledigt}
                                 updatePunkt={(id, title, harken, anzahl, notizen) => this.updatePunktInState(id, title, harken, anzahl, notizen)}
-                                updateDoneOrNot={(id, harken) =>this.updatePunktStrichDoneOrNot(id,harken)} />
-
+                                updateDoneOrNot={(id, harken) => this.updatePunktStrichDoneOrNot(id, harken)}/>
                 <div className="d-flex flex-row justify-content-center  ">
-                    <Button className=" btn-secondary btn-sm mt-4 mb-4" onClick={this.deleateAllDoneItems}>Erledigte Einkäufe
+                    <Button className=" btn-secondary btn-sm mt-4 mb-4" onClick={this.deleateAllDoneItems}>Erledigte
+                        Einkäufe
                         löschen</Button>
                 </div>
             </div>
         )
     }
 }
+
 export default App;
 
 

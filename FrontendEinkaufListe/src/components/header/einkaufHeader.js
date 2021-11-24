@@ -5,11 +5,20 @@ import React, {useState} from "react";
 export function EinkaufHeader(props){
     const [value,setValue] = useState();
 
+
+    /**
+     * Übergibt eingabe (Itemname) an props.handleSubmit
+     * @param event
+     */
     const handleSubmitHeader=(event)=>{
         event.preventDefault(); //event.preventDefault  seite wird nicht mehr selbstständig geladen wegen onSubmit
         props.handleSubmit(value);
     }
 
+    /**
+     * speichert veränderungen bei der eingabe onChange im state
+     * @param event
+     */
    const handleChange =(event) => {
         setValue(event.target.value); //warum geschweifte klammern
         console.log(value);
