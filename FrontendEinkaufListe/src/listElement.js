@@ -5,6 +5,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPen} from '@fortawesome/free-solid-svg-icons';
 import "./Styles.scss";
 import "./App.scss";
+import {AxiosCalls} from "./axiosCalls";
 
 export function ListElement(props) {
     const [amount, setAmount] = useState(props.item.amount);
@@ -22,7 +23,14 @@ export function ListElement(props) {
 
     const handleDurchstreichen = () => {
         console.log("card or box klicked: " + props.item.itId);
-        axios({
+        const ob = {
+            "itId": props.id,
+            "einkaufsPunkt": "platzhalterdatenloeschen",
+            "strich": false,
+            "amount": 1
+        }
+        AxiosCalls('put','http://127.0.0.1:8081/einkaufsListeDurchgestrichen',ob);
+        /*axios({
             method: 'put',
             url: 'http://127.0.0.1:8081/einkaufsListeDurchgestrichen',
             data: {
@@ -32,14 +40,22 @@ export function ListElement(props) {
                 "amount": 1
 
             },
-        })
+        }) */
         props.updateDoneOrNot(props.id, props.item.strich);
 
     }
 
     const handleClose = () => {
         console.log("notizen: " + notes);
-        axios({
+       const ob = {
+           "itId": props.item.itId,
+           "einkaufsPunkt": titel,
+           "strich": false,
+           "amount": amount,
+           "notizen": notes
+       }
+       AxiosCalls('put','http://127.0.0.1:8081/einkaufsListeUpdateM', ob);
+       /* axios({
             method: 'put',
             url: 'http://127.0.0.1:8081/einkaufsListeUpdateM',
             data: {
@@ -49,7 +65,7 @@ export function ListElement(props) {
                 "amount": amount,
                 "notizen": notes
             },
-        })
+        }) */
 
         props.updatePunkt(props.item.itId, titel, false, amount, notes);
         setShowM(false);

@@ -7,7 +7,7 @@ import {Col, Container, Row, Card, Modal, Button} from "react-bootstrap";
 import "./Styles.scss";
 import {ListElement} from "./listElement";
 import {AxiosCalls} from "./axiosCalls";
-let ob = {}; //ist leer, render holt es sich bevor es  gefuellt ist und dato vorhanden ist
+
 class App extends React.Component { // es mit klasse versuchen
 
     constructor(props) {
@@ -35,15 +35,7 @@ class App extends React.Component { // es mit klasse versuchen
         promise.then(wert =>{
             console.log("back ",wert.data );
                 this.setState({punkt: wert.data})
-        }
-        /*{if(wert.data.einkaufsPunkt === null || wert.data.einkaufsPunkt === undefined){
-            console.log("einkaufsPunkt ist Null");
-        } else {
-            console.log("einkaufsPunkt ist nicht null", wert.data.einkaufsPunkt);
-            this.setState({punkt: wert.data})
-
-        }
-        }*/ )
+        })
     }
 
     backEr() {
@@ -92,18 +84,6 @@ class App extends React.Component { // es mit klasse versuchen
            const promise = AxiosCalls('post','http://127.0.0.1:8081/einkaufsListe',cPunkt);
 
 
-
-           /* axios({
-                method: 'post',
-                url: 'http://127.0.0.1:8081/einkaufsListe',
-                data: {
-                    "itId": 100,
-                    "einkaufsPunkt": einkaufsPunkt,
-                    "strich": false,
-                    "amount": anzahl,
-                },
-            }) */
-
                 promise.then(item => {
                     console.log("Post then App:", item.data);
                 let punkt = [...this.state.punkt];
@@ -142,7 +122,13 @@ class App extends React.Component { // es mit klasse versuchen
     handleButton(a, e) {
         console.log(a);
         e.preventDefault();
-        axios({
+        const ob = {
+            "itId": a,
+            "einkaufsPunkt": "platzhalterdatenloeschen",
+            "strich": false
+        }
+        AxiosCalls('delete', 'http://127.0.0.1:8081/einkaufsListeElementLoeschen',ob);
+        /*axios({
             method: 'delete',
             url: 'http://127.0.0.1:8081/einkaufsListeElementLoeschen',
             data: {
@@ -150,7 +136,7 @@ class App extends React.Component { // es mit klasse versuchen
                 "einkaufsPunkt": "platzhalterdatenloeschen",
                 "strich": false
             },
-        })
+        }) */
     }
 
     /**
@@ -215,16 +201,19 @@ class App extends React.Component { // es mit klasse versuchen
         //this.setState({punktErledigt: []});
         //console.log("dealeateTest: ", this.state.punkt);
         //e.preventDefault();
-
-        axios({
+        const ob = {
+            "itId": 3,
+            "einkaufsPunkt": "platzhalterdatenloeschen",
+            "strich": false
+        }
+        AxiosCalls('delete','http://127.0.0.1:8081/einkaufssListeElementeDoneLoeschen',ob);
+        /*axios({
             method: 'delete',
             url: 'http://127.0.0.1:8081/einkaufssListeElementeDoneLoeschen',
             data: {
-                "itId": 3,
-                "einkaufsPunkt": "platzhalterdatenloeschen",
-                "strich": false
+
             },
-        })
+        }) */
 
     }
 
