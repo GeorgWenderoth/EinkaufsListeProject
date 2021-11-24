@@ -17,13 +17,15 @@ public class EinkaufElement{  // Hier sind die daten für das gesamte json objek
     private boolean strich;
     private int amount;
 
+    private String notizen;
 
 
-    public EinkaufElement(int itId, String einkaufsPunkt , boolean strich, int amount){
+    public EinkaufElement(int itId, String einkaufsPunkt , boolean strich, int amount, String notizen){
         this.itId = itId;
         this.einkaufsPunkt = einkaufsPunkt;
         this.strich = strich;
         this.amount = amount;
+        this.notizen = notizen;
     }
 
     public EinkaufElement() {
@@ -67,6 +69,15 @@ public class EinkaufElement{  // Hier sind die daten für das gesamte json objek
         this.amount = amount;
     }
 
+
+
+    public String getNotizen() {
+        return notizen;
+    }
+
+    public void setNotizen(String notizen) {
+        this.notizen = notizen;
+    }
     /*   public int getId(){
         return id;
     }

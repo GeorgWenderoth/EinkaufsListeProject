@@ -1,53 +1,58 @@
 package com.adorsys.demo;
 
-import com.adorsys.demo.GroceryService;
-import com.sun.jdi.event.StepEvent;
-import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-
-
-public class groceryController {
-
-   // public EinkaufElement element; //Instanzvariable
-   /* String einkaufsPunkt = "";
-    Integer itId = 0;
-    Boolean strich = false; */
-
-
-    /*@GetMapping ("/einkaufsListe")
-    public String zeigePunkt(){
-        return  element.getEinkaufsPunkt();
-    }
-    @PostMapping("/einkaufsListe/{punkt}")
-    public void erstellePunkt(@PathVariable String punkt){
-        this.element = new EinkaufElement(punkt);
-    }
-    @GetMapping("/ein")
-    @PostMapping("")
-
-    */
+/**
+ * Controller
+ * APi-Schnittstellen
+ */
+public class GroceryController {
 
 
     public GroceryService service;
-    public groceryController(GroceryService groceryService){ //warum
+    public GroceryController(GroceryService groceryService){ //warum
         this.service = groceryService;
     }
 
+    /**
+     * Gibt alle nicht erledigten einkäufe zurück
+     * @return
+     */
+    @CrossOrigin
+    @GetMapping ("/einkaufsListeElementeNotDone")
+    public  ResponseEntity<List<EinkaufElement>> getEinkaufUndone(){
+        return new  ResponseEntity<>(service.getEinkaufElementsByStrich(false),HttpStatus.OK);
+    }
+
+    /**
+     * Gibt alle erledigten Einkäufe zurück
+     * @return
+     */
+    @CrossOrigin
+    @GetMapping ("/einkaufsListeElementeDone")
+    public  ResponseEntity<List<EinkaufElement>> getEinkaufDone(){
+        return new  ResponseEntity<>(service.getEinkaufElementsByStrich(true),HttpStatus.OK);
+    }
+/*
     @CrossOrigin
     @GetMapping ("/einkaufsListeElemente")
     public ResponseEntity<List<EinkaufElement>> getEinkauf(){
         return new ResponseEntity<>(service.getEinkaufElements(), HttpStatus.OK);
-    }
+    } */
+
+    /**
+     * Fügt einen neuen Einkauf hinzu
+     * @param element
+     * @return
+     */
     @CrossOrigin
     @PostMapping("/einkaufsListe")
     public ResponseEntity<EinkaufElement> neuerEinkauf(@RequestBody EinkaufElement element){
         System.out.println("Testelement");
-
         System.out.println( element);
         System.out.println("punkt:" + element.getEinkaufsPunkt());
         System.out.println("id " + element.getItId());
@@ -58,24 +63,48 @@ public class groceryController {
 
     }
 
-    @CrossOrigin
-    @PutMapping("/einkaufsListeAnzahlAendern")
-    public ResponseEntity<EinkaufElement> anzahl(@RequestBody EinkaufElement element){
-        return new ResponseEntity<>(this.service.änderAnzahl(element.getItId(), element.getAmount()),HttpStatus.OK);
-    }
-
+    /**
+     * ändert den status auf durchgestrichen/ erledigt oder unerledigt / nicht durchgestrichen
+     * @param element
+     * @return
+     */
     @CrossOrigin
     @PutMapping("/einkaufsListeDurchgestrichen")
     public ResponseEntity<EinkaufElement> durchstreichen(@RequestBody EinkaufElement element){
            return new ResponseEntity<>(this.service.streicheDurch(element.getItId(), element.getStrich()),HttpStatus.OK);
     }
 
+    /**
+     * Updated element
+     * @param element
+     * @return
+     */
+    @CrossOrigin
+    @PutMapping("/einkaufsListeUpdateM")
+    public ResponseEntity<EinkaufElement> update(@RequestBody EinkaufElement element){
+        return new ResponseEntity<>(this.service.updateElementM(element.getItId(), element.getAmount(), element.getEinkaufsPunkt(), element.getNotizen()),HttpStatus.OK);
+    }
+    /* Brauche ich das noch?
     @CrossOrigin
     @DeleteMapping("/einkaufsListeElementLoeschen")
     public ResponseEntity<Void> loescheElement(@RequestBody EinkaufElement element){
         service.loescheElement(element.getItId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+     */
+
+    /**
+     * Löscht alle erledigten elemente
+     */
+    @CrossOrigin
+    @DeleteMapping("/einkaufssListeElementeDoneLoeschen")
+    public void loescheAllDoneElements(){
+        service.loescheElementeDone();
+        return ;
+    }
+
+
 
 
 }

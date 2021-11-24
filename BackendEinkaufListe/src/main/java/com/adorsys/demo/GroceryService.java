@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 
-
 @Service
 public class GroceryService {
 
@@ -27,13 +26,21 @@ public class GroceryService {
         return repository.save(element);
     }
 
+    public List<EinkaufElement> getEinkaufElementsByStrich(boolean strich){
+        return repository.findAllByStrich(strich);
+    }
+
     public EinkaufElement sucheElement(int id){
         return this.repository.findByItId(id).orElseThrow(() -> new ElementNichtVorhanden("Das Gesuchte Element ist nicht vorhanden"));
     }
 
-    public EinkaufElement änderAnzahl(int id, int amount){
+
+
+    public EinkaufElement updateElementM(int id, int amount, String einkaufsPunkt, String notizen){
         EinkaufElement element = this.sucheElement(id);
         element.setAmount(amount);
+        element.setEinkaufsPunkt(einkaufsPunkt);
+        element.setNotizen(notizen);
         repository.save(element);
         return element;
     }
@@ -49,9 +56,19 @@ public class GroceryService {
         return element;
     }
 
+
+
     public void loescheElement(int id){
         EinkaufElement element = this.sucheElement(id);
 
         this.repository.delete(element);
     }
+
+    public void loescheElementeDone(){
+        List<EinkaufElement> l = repository.findAllByStrich(true);
+        this.repository.deleteAll(l);
+    }
+
+
+
 }
