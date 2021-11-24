@@ -108,5 +108,5 @@ const Item = ({ id, item, list, setList, complete }) => {
         </div>
     );
 };
-export default Item;
+//export default Item;
 

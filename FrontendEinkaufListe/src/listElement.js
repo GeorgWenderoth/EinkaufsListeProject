@@ -4,8 +4,8 @@ import {Col, Row, Card, Button, Modal} from "react-bootstrap";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPen} from '@fortawesome/free-solid-svg-icons';
 import "./Styles.scss";
-import "./App.scss";
-import {AxiosCalls} from "./axiosCalls";
+import "./components/App.scss";
+import {AxiosCalls} from "./utils/axiosCalls";
 
 export function ListElement(props) {
     const [amount, setAmount] = useState(props.item.amount);

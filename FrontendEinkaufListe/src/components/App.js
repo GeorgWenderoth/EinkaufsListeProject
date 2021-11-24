@@ -4,9 +4,12 @@ import React, {useState} from "react";
 import "./App.scss";
 
 import {Col, Container, Row, Card, Modal, Button} from "react-bootstrap";
-import "./Styles.scss";
-import {ListElement} from "./listElement";
-import {AxiosCalls} from "./axiosCalls";
+import "../Styles.scss";
+import {ListElement} from "../listElement";
+import {AxiosCalls} from "../utils/axiosCalls";
+import {EinkaufHeader} from "../einkaufHeader";
+import {BereichUeberschrift} from "../bereichUeberschrift";
+import {ContainerListe} from "../containerListe";
 
 class App extends React.Component { // es mit klasse versuchen
 
@@ -48,11 +51,9 @@ class App extends React.Component { // es mit klasse versuchen
         console.log(this.state.value);
     }
 
-    handleSubmit = (event) => {
-         event.preventDefault(); //event.preventDefault bei Submit behebt den fehler, eite wird nicht mehr selbstständig geladen
-        if (this.state.value !== "") {
-            let trim = this.state.value.trim();
-            //console.log("target:" + event.target[0].value + ":");
+    handleSubmit = (value) => {
+        if (value !== "") {
+            let trim = value.trim();
             const split = trim.split(/(\d+)/);
            // console.log("länge Splitt: " + split.length + ", letztes element:" + split[split.length - 1] + ":");
           //  console.log("gespliteter String:" + split + ":");
@@ -60,13 +61,11 @@ class App extends React.Component { // es mit klasse versuchen
             if (split[split.length - 1] === "") {
                 anzahl = split[split.length - 2];
                 split.length = split.length - 2;
-
             } else {
                 anzahl = 1;
             }
            // console.log("anzahl: " + anzahl);
             if (split[0] === "") {
-
                 let a = split.shift();
              //   console.log("index 0 Soll removed werden:" + a + ": " + split);
             }
@@ -82,15 +81,10 @@ class App extends React.Component { // es mit klasse versuchen
             }
 
            const promise = AxiosCalls('post','http://127.0.0.1:8081/einkaufsListe',cPunkt);
-
-
                 promise.then(item => {
-                    console.log("Post then App:", item.data);
+                    console.log("App: Post .then:", item.data);
                 let punkt = [...this.state.punkt];
                     punkt.push(item.data);
-
-                console.log("then post", item.data.itId );
-
                 this.setState({punkt: punkt});
             });
         }
@@ -107,16 +101,6 @@ class App extends React.Component { // es mit klasse versuchen
                 "amount": e.target.value
         }
         AxiosCalls('put', 'http://127.0.0.1:8081/einkaufsListeAnzahlAendern', ob);
-      /*  axios({
-            method: 'put',
-            url: 'http://127.0.0.1:8081/einkaufsListeAnzahlAendern',
-            data: {
-                "itId": a,
-                "einkaufsPunkt": "platzhalterdatenloeschen",
-                "strich": false,
-                "amount": e.target.value
-            },
-        }) */
     }
 
     handleButton(a, e) {
@@ -128,15 +112,6 @@ class App extends React.Component { // es mit klasse versuchen
             "strich": false
         }
         AxiosCalls('delete', 'http://127.0.0.1:8081/einkaufsListeElementLoeschen',ob);
-        /*axios({
-            method: 'delete',
-            url: 'http://127.0.0.1:8081/einkaufsListeElementLoeschen',
-            data: {
-                "itId": a,
-                "einkaufsPunkt": "platzhalterdatenloeschen",
-                "strich": false
-            },
-        }) */
     }
 
     /**
@@ -207,37 +182,66 @@ class App extends React.Component { // es mit klasse versuchen
             "strich": false
         }
         AxiosCalls('delete','http://127.0.0.1:8081/einkaufssListeElementeDoneLoeschen',ob);
-        /*axios({
-            method: 'delete',
-            url: 'http://127.0.0.1:8081/einkaufssListeElementeDoneLoeschen',
-            data: {
-
-            },
-        }) */
-
     }
 
     render() {
         return (
             <div className="App">
-                <div className="header">
-                    <h1 className="ueberschrift">Digitale Einkaufsliste</h1>
-                    <form className="row g-3 justify-content-center"/*className="addButton"*/
-                          onSubmit={this.handleSubmit}>
-                        <div className="col-auto">
-                            <input className="form-control" type="text" id="inp" placeholder="Einkaufspunkt"
-                                   value={this.state.value} onChange={this.handleChange}/>
-                        </div>
-                        <div className="col-auto">
-                            <Button type="submit" className="btn-secondary">Hinzufügen</Button>
-                        </div>
-                    </form>
+              <EinkaufHeader  handleSubmit={(value) =>this.handleSubmit(value)}/>
+                <BereichUeberschrift ueberschrift={"Zu erledigende Einkäufe"}/>
+                <ContainerListe itemList={this.state.punkt} updatePunkt={(id, title, harken, anzahl, notizen) => this.updatePunktInState(id, title, harken, anzahl, notizen)}
+                                updateDoneOrNot={(id, harken) =>this.updatePunktStrichDoneOrNot(id,harken)} />
+
+
+
+
+                <BereichUeberschrift ueberschrift={"Erledigte Einkäufe"}/>
+                <ContainerListe itemList={this.state.punktErledigt}
+                                updatePunkt={(id, title, harken, anzahl, notizen) => this.updatePunktInState(id, title, harken, anzahl, notizen)}
+                                updateDoneOrNot={(id, harken) =>this.updatePunktStrichDoneOrNot(id,harken)} />
+
+                <div className="d-flex flex-row justify-content-center  ">
+                    <Button className=" btn-secondary btn-sm mt-4 mb-4" onClick={this.deleateAllDoneItems}>Erledigte Einkäufe
+                        löschen</Button>
                 </div>
-                <div className="d-flex justify-content-center">
+            </div>
+        )
+    }
+}
+export default App;
+
+
+/*
+<div className="header">
+                    <h1 className="ueberschrift">Digitale Einkaufsliste</h1>
+                    <form className="row g-3 justify-content-center"
+onSubmit={this.handleSubmit}>
+    <div className="col-auto">
+    <input className="form-control" type="text" id="inp" placeholder="Einkaufspunkt"
+value={this.state.value} onChange={this.handleChange}/>
+</div>
+<div className="col-auto">
+<Button type="submit" className="btn-secondary">Hinzufügen</Button>
+</div>
+</form>
+</div>
+
+
+<div className="d-flex justify-content-center">
                     <p className="schrift">
                         Zu erledigende Einkäufe
                     </p>
                 </div>
+
+
+
+                <div className="d-flex justify-content-center">
+                    <p className="schrift mt-4">
+                        Erledigte Einkäufe
+                    </p>
+                </div>
+
+
 
                 <Container className="container">
                     <div className="d-flex justify-content-center">
@@ -248,11 +252,8 @@ class App extends React.Component { // es mit klasse versuchen
                         </div>
                     </div>
                 </Container>
-                <div className="d-flex justify-content-center">
-                    <p className="schrift mt-4">
-                        Erledigte Einkäufe
-                    </p>
-                </div>
+
+
                 <Container className="container">
                     <div className="d-flex justify-content-center">
                         <div
@@ -262,12 +263,4 @@ class App extends React.Component { // es mit klasse versuchen
                         )}</div>
                     </div>
                 </Container>
-                <div className="d-flex flex-row justify-content-center  ">
-                    <Button className=" btn-secondary btn-sm mt-4 mb-4" onClick={this.deleateAllDoneItems}>Erledigte Einkäufe
-                        löschen</Button>
-                </div>
-            </div>
-        )
-    }
-}
-export default App;
+ */
