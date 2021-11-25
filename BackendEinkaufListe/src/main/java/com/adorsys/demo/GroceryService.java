@@ -8,6 +8,9 @@ import java.util.List;
 
 
 @Service
+/**
+ * Service, wird vom Grocerycontroller aufgerufen, und fürt die zurgrüffe / änderungen am Repository durch
+ */
 public class GroceryService {
 
     @Autowired
@@ -35,7 +38,14 @@ public class GroceryService {
     }
 
 
-
+    /**
+     * Fürt die updates von änderungen am Modal durch
+     * @param id
+     * @param amount
+     * @param einkaufsPunkt
+     * @param notizen
+     * @return
+     */
     public EinkaufElement updateElementM(int id, int amount, String einkaufsPunkt, String notizen){
         EinkaufElement element = this.sucheElement(id);
         element.setAmount(amount);
@@ -45,6 +55,12 @@ public class GroceryService {
         return element;
     }
 
+    /**
+     * Ändert von Done auf Undone und von Undone auf Done
+     * @param id
+     * @param strich
+     * @return
+     */
     public EinkaufElement streicheDurch(int id, boolean strich){
         EinkaufElement element = this.sucheElement(id);
         if(element.getStrich()){
@@ -64,6 +80,9 @@ public class GroceryService {
         this.repository.delete(element);
     }
 
+    /**
+     * Löscht alle erledigten elemente
+     */
     public void loescheElementeDone(){
         List<EinkaufElement> l = repository.findAllByStrich(true);
         this.repository.deleteAll(l);

@@ -46,7 +46,10 @@ class App extends React.Component {
     }
 
 
-
+    /**
+     * Man die eingabe konform, überprüft ob eine anzhal gegeben ist, speichert im state und backend
+     * @param value
+     */
     handleSubmit = (value) => {
         if (value !== "") {
             const trim = value.trim();
@@ -142,7 +145,7 @@ class App extends React.Component {
             "strich": false
         }
       const response = AxiosCalls('delete', 'http://127.0.0.1:8081/einkaufssListeElementeDoneLoeschen', ob);
-        this.setState({punktErledigt: []});
+       // this.setState({punktErledigt: []});
     }
 
     render() {
