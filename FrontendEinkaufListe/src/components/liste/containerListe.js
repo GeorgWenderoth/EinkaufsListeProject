@@ -3,7 +3,12 @@ import {Container} from "react-bootstrap";
 import React from "react";
 import "../../Styles.scss";
 
-
+/**
+ * Rendert die Kacheln / Einkäufe
+ * @param props = itemList, updatePunkt, updateDoneOrNot
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function ContainerListe (props) {
 
 

@@ -8,7 +8,10 @@ import {ContainerListe} from "./liste/containerListe";
 
 //require('dotenv').config()
 
-
+/**
+ * Main Component
+ * Rendert alle anderen Components
+ */
 class App extends React.Component {
 
     constructor(props) {
@@ -56,7 +59,7 @@ class App extends React.Component {
 
     /**
      * Man die eingabe konform, überprüft ob eine anzhal gegeben ist, speichert im state und backend
-     * @param value
+     * @param value = Der String der Eingegeben wurde
      */
     handleSubmit = (value) => {
         if (value !== "") {
@@ -120,7 +123,7 @@ class App extends React.Component {
     /**
      * Updated den state wenn ein Item verschoben wird von unerledigt zu erledigt und andersherum
      * @param id
-     * @param harken
+     * @param harken = ist ein einkauf erledigt oder nicht
      */
     updatePunktStrichDoneOrNot(id, harken) {
         console.log("harken: " + harken);// strichw wert muss noch geändert werden.
@@ -177,58 +180,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-
-/*
-<div className="header">
-                    <h1 className="ueberschrift">Digitale Einkaufsliste</h1>
-                    <form className="row g-3 justify-content-center"
-onSubmit={this.handleSubmit}>
-    <div className="col-auto">
-    <input className="form-control" type="text" id="inp" placeholder="Einkaufspunkt"
-value={this.state.value} onChange={this.handleChange}/>
-</div>
-<div className="col-auto">
-<Button type="submit" className="btn-secondary">Hinzufügen</Button>
-</div>
-</form>
-</div>
-
-
-<div className="d-flex justify-content-center">
-                    <p className="schrift">
-                        Zu erledigende Einkäufe
-                    </p>
-                </div>
-
-
-
-                <div className="d-flex justify-content-center">
-                    <p className="schrift mt-4">
-                        Erledigte Einkäufe
-                    </p>
-                </div>
-
-
-
-                <Container className="container">
-                    <div className="d-flex justify-content-center">
-                        <div className="d-flex flex-wrap  justify-content-center reihe">
-                            {this.state.punkt.map((item) => <ListElement item={item} id={item.itId}
-                                                                      updatePunkt={(id, title, harken, anzahl, notizen) => this.updatePunktInState(id, title, harken, anzahl, notizen)}
-                                                                      updateDoneOrNot={(id, harken) =>this.updatePunktStrichDoneOrNot(id,harken)}   />)}
-                        </div>
-                    </div>
-                </Container>
-
-
-                <Container className="container">
-                    <div className="d-flex justify-content-center">
-                        <div
-                            className="d-flex flex-wrap  justify-content-center reihe">{this.state.punktErledigt.map((item) =>
-                            <ListElement item={item} id={item.itId}
-                                         updateDoneOrNot={(id, harken) =>this.updatePunktStrichDoneOrNot(id,harken)}  />
-                        )}</div>
-                    </div>
-                </Container>
- */
