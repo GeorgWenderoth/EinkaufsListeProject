@@ -41,7 +41,7 @@ export function ListElement(props) {
             "strich": false,
             "amount": 1
         }
-        AxiosCalls('put','http://127.0.0.1:8081/einkaufsListeDurchgestrichen',ob);
+        AxiosCalls('put','/einkaufsListeDurchgestrichen',ob);
         props.updateDoneOrNot(props.id, props.item.strich);
 
     }
@@ -58,7 +58,7 @@ export function ListElement(props) {
            "amount": amount,
            "notizen": notes
        }
-       AxiosCalls('put','http://127.0.0.1:8081/einkaufsListeUpdateM', ob);
+       AxiosCalls('put','/einkaufsListeUpdateM', ob);
 
         props.updatePunkt(props.item.itId, titel, false, amount, notes);
         setShowM(false);

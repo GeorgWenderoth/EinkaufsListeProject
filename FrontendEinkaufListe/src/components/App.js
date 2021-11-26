@@ -6,6 +6,9 @@ import {EinkaufHeader} from "./header/einkaufHeader";
 import {BereichUeberschrift} from "./ueberschrift/bereichUeberschrift";
 import {ContainerListe} from "./liste/containerListe";
 
+//require('dotenv').config()
+
+
 class App extends React.Component {
 
     constructor(props) {
@@ -18,6 +21,7 @@ class App extends React.Component {
             showM: false,
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.deleteAllDoneItems = this.deleteAllDoneItems.bind(this);
     }
 
     componentDidMount() {
@@ -26,11 +30,15 @@ class App extends React.Component {
         this.backEr();
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log("Upadate: ", this.state.punktErledigt);
+    }
+
     /**
      * Holt sich die Unerledigten Items vom Backend und setzt sie in state
      */
     back() {
-        const promise = AxiosCalls('get', 'http://127.0.0.1:8081/einkaufsListeElementeNotDone', "NotDone");
+        const promise = AxiosCalls('get', '/einkaufsListeElementeNotDone', "NotDone");
         promise.then(wert => {
             console.log("back ", wert.data);
             this.setState({punkt: wert.data})
@@ -41,7 +49,7 @@ class App extends React.Component {
      * Holt sich die Erledigten items vom Backend und setzt sie in state
      */
     backEr() {
-        const promise = AxiosCalls('get', 'http://127.0.0.1:8081/einkaufsListeElementeDone', "Done");
+        const promise = AxiosCalls('get', '/einkaufsListeElementeDone', "Done");
         promise.then(wert => this.setState({punktErledigt: wert.data}))
     }
 
@@ -71,7 +79,7 @@ class App extends React.Component {
                 "amount": anzahl,
             }
 
-            const promise = AxiosCalls('post', 'http://127.0.0.1:8081/einkaufsListe', cPunkt);
+            const promise = AxiosCalls('post', '/einkaufsListe', cPunkt);
             promise.then(item => {
                 console.log("App: Post .then:", item.data);
                 let punkt = [...this.state.punkt];
@@ -138,14 +146,12 @@ class App extends React.Component {
     /**
      *  Löscht alle erledigten Artikel /einkaufsPunkte
      */
-    deleateAllDoneItems() {
-        const ob = {
-            "itId": 3,
-            "einkaufsPunkt": "platzhalterdatenloeschen",
-            "strich": false
-        }
-      const response = AxiosCalls('delete', 'http://127.0.0.1:8081/einkaufssListeElementeDoneLoeschen', ob);
-       // this.setState({punktErledigt: []});
+    deleteAllDoneItems() {
+
+
+
+       AxiosCalls('delete', '/einkaufssListeElementeDoneLoeschen');
+        this.setState({punktErledigt: []});
     }
 
     render() {
@@ -161,7 +167,7 @@ class App extends React.Component {
                                 updatePunkt={(id, title, harken, anzahl, notizen) => this.updatePunktInState(id, title, harken, anzahl, notizen)}
                                 updateDoneOrNot={(id, harken) => this.updatePunktStrichDoneOrNot(id, harken)}/>
                 <div className="d-flex flex-row justify-content-center  ">
-                    <Button className=" btn-secondary btn-sm mt-4 mb-4" onClick={this.deleateAllDoneItems}>Erledigte
+                    <Button className=" btn-secondary btn-sm mt-4 mb-4" onClick={this.deleteAllDoneItems}>Erledigte
                         Einkäufe
                         löschen</Button>
                 </div>
