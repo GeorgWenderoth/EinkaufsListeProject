@@ -22,7 +22,7 @@ export function EinkaufHeader(props){
      */
    const handleChange =(event) => {
         setValue(event.target.value); //warum geschweifte klammern
-        console.log(value);
+       // console.log(value);
     }
 
     return(

@@ -66,12 +66,15 @@ class App extends React.Component {
             const trim = value.trim();
             const split = trim.split(/(\d+)/);
             let anzahl;
+            console.log("anzahl Split: ", split[split.length -2]);
             if (split[split.length - 1] === "") {
                 anzahl = split[split.length - 2];
+                anzahl = parseInt(anzahl);
                 split.length = split.length - 2;
             } else {
                 anzahl = 1;
             }
+
             let einkaufsPunkt = split.toString();
             einkaufsPunkt = einkaufsPunkt.replace(/,/g, '');
             console.log("p: " + einkaufsPunkt);
@@ -126,6 +129,7 @@ class App extends React.Component {
      * @param harken = ist ein einkauf erledigt oder nicht
      */
     updatePunktStrichDoneOrNot(id, harken) {
+
         console.log("harken: " + harken);// strichw wert muss noch geändert werden.
         let punkt = [...this.state.punkt];
         let indexItem = punkt.map(a => a.itId).indexOf(id);
