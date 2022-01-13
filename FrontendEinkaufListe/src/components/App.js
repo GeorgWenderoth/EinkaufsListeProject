@@ -29,12 +29,14 @@ class App extends React.Component {
 
     componentDidMount() {
         console.log("start");
-        this.back();
-        this.backEr();
+      //  this.back();
+       // this.backEr();
+        this.backBoth();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log("Upadate: ", this.state.punktErledigt);
+        console.log("Update: Punkt: ", this.state.punkt);
+        console.log("Update: PunktER: ", this.state.punktErledigt);
     }
 
     /**
@@ -53,7 +55,31 @@ class App extends React.Component {
      */
     backEr() {
         const promise = AxiosCalls('get', '/einkaufsListeElementeDone', "Done");
-        promise.then(wert => this.setState({punktErledigt: wert.data}))
+        promise.then(wert => {
+            console.log("backEr ", wert.data);
+            this.setState({punktErledigt: wert.data})
+
+        })
+    }
+
+    backBoth() {
+        let dataNotDone;
+        let dataDone;
+        let promise = AxiosCalls('get', '/einkaufsListeElementeNotDone', "NotDone");
+
+        promise.then(wert => {
+            dataNotDone = wert.data;
+        })
+         promise = AxiosCalls('get', '/einkaufsListeElementeDone', "Done");
+        promise.then(wert => {
+            dataDone = wert.data;
+            console.log("backBoth: ", dataNotDone, dataDone);
+            this.setState({punkt: dataNotDone, punktErledigt: dataDone});
+
+        })
+
+
+
     }
 
 

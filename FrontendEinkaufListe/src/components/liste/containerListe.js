@@ -10,8 +10,8 @@ import "../../Styles.scss";
  * @constructor
  */
 export function ContainerListe (props) {
-
-
+    console.log("ContainerListe: ", props.itemList);
+        let s = props.itemList;
     return(
         <Container className="container">
             <div className="d-flex justify-content-center">
