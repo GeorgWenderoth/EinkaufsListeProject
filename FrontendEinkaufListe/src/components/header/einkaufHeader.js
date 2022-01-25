@@ -32,7 +32,7 @@ export function EinkaufHeader(props){
                   onSubmit={handleSubmitHeader}>
                 <div className="col-auto">
                     <input className="form-control" type="text" id="inp" placeholder="Einkaufspunkt"
-                           value={value} onChange={handleChange}/>
+                           value={value} onChange={handleChange} /* pattern="(?=.*[a-zA-Z])[a-zA-Z0-9- ]{1,100}" title="Must contain at least one letter, only letters diggits and spaces -"*/ />
                 </div>
                 <div className="col-auto">
                     <Button type="submit" className="btn-secondary">Hinzufügen</Button>

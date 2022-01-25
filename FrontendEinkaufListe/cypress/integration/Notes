@@ -1,0 +1,12 @@
+// Submit, zahl, spaces / trim
+eingabe 2 space zahl
+
+Button desablen wenn eingabe nicht erlaubt
+im state button zustand speichern
+in submit button status überprüfen -> damit auch ob eingabe erlaubt oder nicht
+
+leer eingabe
+
+space eingabe //fehler über prüfen
+
+Verbotene Zeichen im fronten verhinder -> im backend idialer weise auch

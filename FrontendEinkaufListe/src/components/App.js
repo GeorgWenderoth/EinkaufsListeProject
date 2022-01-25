@@ -88,7 +88,8 @@ class App extends React.Component {
      * @param value = Der String der Eingegeben wurde
      */
     handleSubmit = (value) => {
-        if (value !== "") {
+        if (value !== undefined) { // || value !== " "   , /^(?=\D*\d)[a-zA-Z0-9 -]+$/
+            console.log("submitValue:", value);
             const trim = value.trim();
             const split = trim.split(/(\d+)/);
             let anzahl;
@@ -101,7 +102,10 @@ class App extends React.Component {
                 anzahl = 1;
             }
 
+
+
             let einkaufsPunkt = split.toString();
+            einkaufsPunkt = einkaufsPunkt.trim();
             einkaufsPunkt = einkaufsPunkt.replace(/,/g, '');
             console.log("p: " + einkaufsPunkt);
             let cPunkt = {
@@ -180,9 +184,6 @@ class App extends React.Component {
      *  Löscht alle erledigten Artikel /einkaufsPunkte
      */
     deleteAllDoneItems() {
-
-
-
        AxiosCalls('delete', '/einkaufssListeElementeDoneLoeschen');
         this.setState({punktErledigt: []});
     }

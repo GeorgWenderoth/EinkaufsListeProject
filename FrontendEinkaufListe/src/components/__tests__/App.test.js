@@ -1,4 +1,5 @@
 import {act, fireEvent, render, screen} from "@testing-library/react";
+import renderer from 'react-test-renderer';
 import App from "../App";
 import * as Axios from "../../utils/axiosCalls";
 import {ListElement} from "../liste/listItem/listElement";
@@ -14,6 +15,141 @@ import React from "react";
 
 jest.mock("../../utils/axiosCalls")
  let expectedData;
+
+describe('submit tests', ()=> {
+
+    it('should remove spaces', ()=> {
+        Axios.AxiosCalls = jest.fn( (method,url, object)=>{
+            console.log("LOG: ", method, url, object)
+            expectedData = object;
+            return Promise.resolve({data: object});
+        })
+        const utils = render(<App/>);
+
+        const button = screen.getByText("Hinzufügen")
+        const input = utils.getByPlaceholderText('Einkaufspunkt')
+        fireEvent.change(input, {target: {value: ' kürbis '}})
+        button.click();
+        expect(expectedData).toEqual({
+            "einkaufsPunkt": "kürbis",
+            "strich": false,
+            "itId": 100,
+            "amount": 1,
+        });
+    });
+    it('should take the last number as amount',  () => {
+        Axios.AxiosCalls = jest.fn( (method,url, object)=>{
+            console.log("LOG: ", method, url, object)
+            expectedData = object;
+            return Promise.resolve({data: object});
+        })
+        const utils = render(<App/>);
+        const button = screen.getByText("Hinzufügen")
+        const input = utils.getByPlaceholderText('Einkaufspunkt')
+        fireEvent.change(input, {target: {value: 'blume6'}})
+        button.click();
+        expect(expectedData).toEqual({
+            "einkaufsPunkt": "blume",
+            "strich": false,
+            "itId": 100,
+            "amount": 6,
+        });
+    });
+    it('should take the last number as amount, remove all spaces between einkaufspunkt and nummber', ()=>  {
+        Axios.AxiosCalls = jest.fn( (method,url, object)=>{
+            console.log("LOG: ", method, url, object)
+            expectedData = object;
+            return Promise.resolve({data: object});
+        })
+        const utils = render(<App/>);
+        const button = screen.getByText("Hinzufügen")
+        const input = utils.getByPlaceholderText('Einkaufspunkt')
+        fireEvent.change(input, {target: {value: 'blume     6'}})
+        button.click();
+        expect(expectedData).toEqual({
+            "einkaufsPunkt": "blume",
+            "strich": false,
+            "itId": 100,
+            "amount": 6,
+        });
+    });
+    it('should take only the last number as amount,',  () =>  {
+        Axios.AxiosCalls = jest.fn( (method,url, object)=>{
+            console.log("LOG: ", method, url, object)
+            expectedData = object;
+            return Promise.resolve({data: object});
+        })
+        const utils = render(<App/>);
+        const button = screen.getByText("Hinzufügen")
+        const input = utils.getByPlaceholderText('Einkaufspunkt')
+        fireEvent.change(input, {target: {value: '5 gum7 8'}})
+        button.click();
+        expect(expectedData).toEqual({
+            "einkaufsPunkt": "5 gum7",
+            "strich": false,
+            "itId": 100,
+            "amount": 8,
+        });
+    });
+    it('should take no special chars',  () =>  { //funktioniert nicht
+        Axios.AxiosCalls = jest.fn( (method,url, object)=>{
+            console.log("LOG: ", method, url, object)
+            expectedData = object;
+            return Promise.resolve({data: object});
+        })
+        const utils = render(<App/>);
+        const button = screen.getByText("Hinzufügen")
+        const input = utils.getByPlaceholderText('Einkaufspunkt')
+        fireEvent.change(input, {target: {value: 'comand()'}})
+        button.click();
+        expect(expectedData).toEqual({ //anderes expect oder so
+            "einkaufsPunkt": "comand",
+            "strich": false,
+            "itId": 100,
+            "amount": 1,
+        });
+    });
+    it('should not submit empty string,',  () =>  {
+        Axios.AxiosCalls = jest.fn( (method,url, object)=>{
+            console.log("LOG: ", method, url, object)
+            expectedData = object;
+            return Promise.resolve({data: object});
+        })
+        const utils = render(<App/>);
+        const button = screen.getByText("Hinzufügen")
+        const input = utils.getByPlaceholderText('Einkaufspunkt')
+        fireEvent.change(input, {target: {value: ''}})
+        button.click();
+        expect(expectedData).toEqual({ //falsch
+            "einkaufsPunkt": "5 gum7",
+            "strich": false,
+            "itId": 100,
+            "amount": 8,
+        });
+    });
+})
+
+test("submitSpaces", () => {
+    Axios.AxiosCalls = jest.fn( (method,url, object)=>{
+        console.log("LOG: ", method, url, object)
+        expectedData = object;
+        return Promise.resolve({data: object});
+    })
+    const utils = render(<App/>);
+
+    const button = screen.getByText("Hinzufügen")
+    const input = utils.getByPlaceholderText('Einkaufspunkt')
+    fireEvent.change(input, {target: {value: ' kürbis '}})
+    button.click();
+    expect(expectedData).toEqual({
+        "einkaufsPunkt": "kürbis",
+        "strich": false,
+        "itId": 100,
+        "amount": 1,
+    })
+})
+
+
 test("HandleSubmit", ()=>{
     Axios.AxiosCalls = jest.fn( (method,url, object)=>{
     console.log("LOG: ", method, url, object)
@@ -28,7 +164,7 @@ test("HandleSubmit", ()=>{
     const utils = render(<App/>)
     const button = screen.getByText("Hinzufügen")
     const input = utils.getByPlaceholderText('Einkaufspunkt')
-    fireEvent.change(input, {target: {value: 'kaufen2'}})
+    fireEvent.change(input, {target: {value: 'kaufen                  2'}})
     button.click();
 
     expect(Axios.AxiosCalls).toBeCalledTimes(3);
@@ -74,12 +210,7 @@ test("HandleSubmitWithoutNumberState", ()=>{
     Axios.AxiosCalls = jest.fn( (method,url, object)=>{
         console.log("LOG: ", method, url, object)
         expectedData = object;
-        return Promise.resolve({data: {
-                "itId": 100,
-                "einkaufsPunkt": "kaufen",
-                "strich": false,
-                "amount": 1,
-            }});
+        return Promise.resolve({data: object});
     })
 
     const utils = render(<App/>)
@@ -88,13 +219,6 @@ test("HandleSubmitWithoutNumberState", ()=>{
     fireEvent.change(input, {target: {value: 'kaufen'}})
     button.click();
 
-  //  expect(Axios.AxiosCalls).toBeCalled();
-   /* expect(expectedData).toEqual({
-        "einkaufsPunkt": "kaufen",
-        "strich": false,
-        "itId": 100,
-        "amount": 1,
-    }) */
     expect(screen.getByDisplayValue("kaufen")).toBeVisible();
 })
 
@@ -315,7 +439,7 @@ test("Rendering the ListElement with correct with the props ",  ()=>{
 })
 
 test("ListElement erledigen ", async ()=>{
-    Axios.AxiosCalls = jest.fn( (method,url, object)=>{
+   /* Axios.AxiosCalls = jest.fn( (method,url, object)=>{
         console.log("LOG: ", method, url, object)
         expectedData = object;
         if(method === "get" && object === "NotDone"){
@@ -336,7 +460,7 @@ test("ListElement erledigen ", async ()=>{
             return Promise.resolve({data: object});
         }
 
-    })
+    }) */
     let item = {
         "itId": 102,
         "einkaufsPunkt": "kürbis",
@@ -423,6 +547,29 @@ test("ListElement change Details",  ()=>{
     expect(screen.getByText("k")).toBeVisible;
     expect(screen.getByText("1")).toBeVisible;
 
+})
+
+test('SnapshotListElementErledigen', () => {
+    const item = {
+        "itId": 102,
+        "einkaufsPunkt": "kürbis",
+        "strich": false,
+        "amount": 1,
+    }
+    const component = shallow(<ListElement item={item} id={item.itId}
+        /* updatePunkt={props.updatePunkt}
+         updateDoneOrNot={props.updateDoneOrNot} */  />,);
+    const button = component.find('.Card.Body');
+    button.simulate('click');
+
+
+    expect(component.find('Card').toHaveClass('cardColourGreen'));
+    //let tree = component.toJSON();
+    //expect(tree).toMatchSnapshot();
+
+    //tree.props.;
+   // tree = component.toJSON();
+   // expect(tree).toMatchSnapshot();
 })
 
 
