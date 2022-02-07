@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import ListElement from './listElement';
+import ListElement from './liste/listItem/listElement';
 
 
 test('Kachel changes when clicked', () =>{

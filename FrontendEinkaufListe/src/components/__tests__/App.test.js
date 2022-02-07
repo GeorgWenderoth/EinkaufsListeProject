@@ -292,13 +292,7 @@ test("HandleSubmitWithoutNumberState", ()=>{
             //const mount = jest.spyOn(app.);
             const thisStateUpdate = jest.spyOn(app.instance(), "back");
             app.instance().back();
-            //expect(app.instance().back).toHaveBeenCalledTimes(2);
-           // app.instance().black().b
-           // app.instance().forceUpdate();
 
-          //  app.instance().updatePunktStrichDoneOrNot(100,false);
-            //expect(app.state('punkt')).toEqual([]);
-           // expect(app.state('punktErledigt')).toBeDefined();
             console.log("punktErledigt after shallow3 : ", app.state('punktErledigt'));
             console.log("cdu: ", app.componentDidUpdate);
 
@@ -309,20 +303,7 @@ test("HandleSubmitWithoutNumberState", ()=>{
                 expect(app.state('punktErledigt')).toBeDefined();
                 expect(app.state('punktErledigt')).toEqual([]);
             }
-           // app.render(<App/>);
-           // app.update(<App/>);
-            //rerender(<App/>);
-          //  console.log("punkt after shallow 4: ", app.state('punkt'));
-          //  console.log("punktErledigt after shallow4 : ", app.state('punktErledigt'));
-           // console.log("punkt after shallow z: ", z.state('punkt'));
-           // console.log("punktErledigt after shallow z : ", z.state('punktErledigt'));
 
-           // expect(app.state('punkt')).toEqual([]);
-           // expect(app.state('punktErledigt')).toBeDefined();
-           // expect(app.state('punktErledigt')).toEqual([]);
-            //expect(z.state('punkt')).toEqual([]);
-           // expect(z.state('punktErledigt')).toBeDefined();
-           // expect(z.state('punktErledigt')).toEqual([]);
         });
     });
 
