@@ -9,7 +9,7 @@ Es enthält Frontend und Backend,
 
 Frontend:
 - React.js
-- Bottstrap
+- Bootstrap
 - Bootstrap React
 
 
@@ -23,7 +23,7 @@ Backend:
 
 ## Installation
 
-git clone https://git.adorsys.de/gwe/EinkaufsListeProjekt.git
+git clone https://github.com/GeorgWenderoth/EinkaufsListeProject.git
 
 
 
