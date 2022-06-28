@@ -91,6 +91,7 @@ describe('submit tests', ()=> {
             "amount": 8,
         });
     });
+
     it('should take no special chars',  () =>  { //funktioniert nicht
         Axios.AxiosCalls = jest.fn( (method,url, object)=>{
             console.log("LOG: ", method, url, object)
@@ -109,24 +110,8 @@ describe('submit tests', ()=> {
             "amount": 1,
         });
     });
-    it('should not submit empty string,',  () =>  {
-        Axios.AxiosCalls = jest.fn( (method,url, object)=>{
-            console.log("LOG: ", method, url, object)
-            expectedData = object;
-            return Promise.resolve({data: object});
-        })
-        const utils = render(<App/>);
-        const button = screen.getByText("Hinzufügen")
-        const input = utils.getByPlaceholderText('Einkaufspunkt')
-        fireEvent.change(input, {target: {value: ''}})
-        button.click();
-        expect(expectedData).toEqual({ //falsch
-            "einkaufsPunkt": "5 gum7",
-            "strich": false,
-            "itId": 100,
-            "amount": 8,
-        });
-    });
+
+
 })
 
 test("submitSpaces", () => {
@@ -222,39 +207,6 @@ test("HandleSubmitWithoutNumberState", ()=>{
     expect(screen.getByDisplayValue("kaufen")).toBeVisible();
 })
 
-/*test("UndoneElementChangesToDoneElementWhenClicked", ()=>{
-    Axios.AxiosCalls = jest.fn( (method,url, object)=>{
-        console.log("LOG: ", method, url, object)
-        expectedData = object;
-        return Promise.resolve({data: {
-                "itId": 100,
-                "einkaufsPunkt": "kaufen",
-                "strich": false,
-                "amount": 1,
-            }});
-    })
-    //const app = shallow(<App/>)
-    const utils = render(<App/>)
-    const app = shallow(<App/>)
-
-    const input = app.find("input");
-    fireEvent.change(input, {target: {value: 'kaufen'}})
-    app.find("button").simulate("click");
-    const spy = jest.spyOn(app.instance(), "updatePunktStrichDoneOrNot");
-    app.instance().updatePunktStrichDoneOrNot(100,true);
-
-
-    console.log("expectedData: ", app.state("punktErledigt"));
-    console.log("expectedData: ", app.state("punkt"));
-    expect(app.state("punktErledigt")).toBeDefined();
-    /*toBe({
-        "einkaufsPunkt": "kaufen",
-        "strich": false,
-        "itId": 100,
-        "amount": 1,
-    });
-}) */
-
 
 
 
@@ -307,7 +259,7 @@ test("HandleSubmitWithoutNumberState", ()=>{
         });
     });
 
-test("DeleateElementInBackend", async ()=>{
+test("DeleateElementInBackend", async ()=>{  //brauche ich nicht?
     Axios.AxiosCalls = jest.fn( (method,url, object)=>{
         console.log("LOG: ", method, url, object)
         expectedData = object;
@@ -420,28 +372,6 @@ test("Rendering the ListElement with correct with the props ",  ()=>{
 })
 
 test("ListElement erledigen ", async ()=>{
-   /* Axios.AxiosCalls = jest.fn( (method,url, object)=>{
-        console.log("LOG: ", method, url, object)
-        expectedData = object;
-        if(method === "get" && object === "NotDone"){
-            return Promise.resolve({data: [{
-                    "itId": 99,
-                    "einkaufsPunkt": "birne",
-                    "strich": false,
-                    "amount": 1,
-                }]});
-        } else if(method === "get" && object === "Done"){
-            return Promise.resolve({data: [{
-                    "itId": 101,
-                    "einkaufsPunkt": "apfel",
-                    "strich": true,
-                    "amount": 1,
-                }]});
-        } else if(method ==="post"){
-            return Promise.resolve({data: object});
-        }
-
-    }) */
     let item = {
         "itId": 102,
         "einkaufsPunkt": "kürbis",
@@ -449,34 +379,17 @@ test("ListElement erledigen ", async ()=>{
         "amount": 1,
     }
    const updateDoneOrNot = jest.fn(()=>{
-
         item.strich = true;
-
     })
-
-
     const utils = render(<ListElement item={item} id={item.itId}
         // updatePunkt={props.updatePunkt}
          updateDoneOrNot={updateDoneOrNot}   />);
-
-   // const elementClass = await document.getElementsByClassName("cardStyle card cardColourRed")//.classList//.contains("cardColourGreen");
 
     const wrapper = shallow(<Card.Body onClick={updateDoneOrNot}/>);
     wrapper.find('div').at(0).simulate('click');
     const test = shallow(<Card className="cardStyle"/>)
 
     const elementClass = test.firstChild;
-
-
-    //const test = screen.getElementsByTagName(<div className="cardStyle cardColourRed card"/>)
-    //const button = shallow((<div className="card-body"/> ));
-    //button.find('button').simulate('click');
-   /* const cardBody = utils.find(".card-body");
-    act(()=> {
-        fireEvent.click(cardBody);
-    }) */
-
-    //const elementClass = document.getElementsByClassName("cardStyle").classList.contains("cardColourGreen");
 
 
     expect(elementClass.className).toEqual("cardColourGreen");

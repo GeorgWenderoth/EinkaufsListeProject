@@ -34,6 +34,7 @@ class App extends React.Component {
         this.backBoth();
     }
 
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         console.log("Update: Punkt: ", this.state.punkt);
         console.log("Update: PunktER: ", this.state.punktErledigt);
