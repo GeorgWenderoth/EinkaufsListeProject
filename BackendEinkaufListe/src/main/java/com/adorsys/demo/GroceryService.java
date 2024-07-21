@@ -68,7 +68,6 @@ public class GroceryService {
         return element;
     }
 
-
     @Deprecated
     public void loescheElement(int id){
         EinkaufElement element = this.sucheElement(id);
@@ -82,7 +81,4 @@ public class GroceryService {
         List<EinkaufElement> l = repository.findAllByStrich(true);
         this.repository.deleteAll(l);
     }
-
-
-
 }
