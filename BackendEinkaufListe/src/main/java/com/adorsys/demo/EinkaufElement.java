@@ -6,17 +6,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity //gibt bekannt das, dass Element eine Jpa entity ist -> Repository
-
-public class EinkaufElement{  // Hier sind die daten für das gesamte json objekt brauche ich keine getteruns setter
+public class EinkaufElement{ 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-   // private int id;
     private int itId;
     private String einkaufsPunkt;
     private boolean strich;
     private int amount;
-
     private String notizen;
 
 
@@ -31,9 +28,6 @@ public class EinkaufElement{  // Hier sind die daten für das gesamte json objek
     public EinkaufElement() {
 
     }
-
-
-
 
     public int getItId(){
         return itId;
@@ -69,8 +63,6 @@ public class EinkaufElement{  // Hier sind die daten für das gesamte json objek
         this.amount = amount;
     }
 
-
-
     public String getNotizen() {
         return notizen;
     }
@@ -78,16 +70,4 @@ public class EinkaufElement{  // Hier sind die daten für das gesamte json objek
     public void setNotizen(String notizen) {
         this.notizen = notizen;
     }
-    /*   public int getId(){
-        return id;
-    }
-
-    public void setId(int id){
-        this.id = id;
-    } */
-
-
 }
-
-
-
