@@ -6,8 +6,6 @@ import {EinkaufHeader} from "./header/einkaufHeader";
 import {BereichUeberschrift} from "./ueberschrift/bereichUeberschrift";
 import {ContainerListe} from "./liste/containerListe";
 
-//require('dotenv').config()
-
 /**
  * Main Component
  * Rendert alle anderen Components
@@ -28,12 +26,8 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        console.log("start");
-      //  this.back();
-       // this.backEr();
         this.backBoth();
     }
-
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         console.log("Update: Punkt: ", this.state.punkt);
@@ -46,7 +40,6 @@ class App extends React.Component {
     back() {
         const promise = AxiosCalls('get', '/einkaufsListeElementeNotDone', "NotDone");
         promise.then(wert => {
-            console.log("back ", wert.data);
             this.setState({punkt: wert.data})
         })
     }
@@ -57,9 +50,7 @@ class App extends React.Component {
     backEr() {
         const promise = AxiosCalls('get', '/einkaufsListeElementeDone', "Done");
         promise.then(wert => {
-            console.log("backEr ", wert.data);
             this.setState({punktErledigt: wert.data})
-
         })
     }
 
@@ -74,27 +65,20 @@ class App extends React.Component {
          promise = AxiosCalls('get', '/einkaufsListeElementeDone', "Done");
         promise.then(wert => {
             dataDone = wert.data;
-            console.log("backBoth: ", dataNotDone, dataDone);
             this.setState({punkt: dataNotDone, punktErledigt: dataDone});
-
         })
-
-
-
     }
 
-
     /**
-     * Man die eingabe konform, überprüft ob eine anzhal gegeben ist, speichert im state und backend
+     * Sind die Eingaben konform, überprüft ob eine Anzahl gegeben ist, speichert im state und Backend
      * @param value = Der String der Eingegeben wurde
      */
     handleSubmit = (value) => {
-        if (value !== undefined) { // || value !== " "   , /^(?=\D*\d)[a-zA-Z0-9 -]+$/
-            console.log("submitValue:", value);
+        if (value !== undefined) { 
             const trim = value.trim();
             const split = trim.split(/(\d+)/);
             let anzahl;
-            console.log("anzahl Split: ", split[split.length -2]);
+           
             if (split[split.length - 1] === "") {
                 anzahl = split[split.length - 2];
                 anzahl = parseInt(anzahl);
@@ -103,12 +87,9 @@ class App extends React.Component {
                 anzahl = 1;
             }
 
-
-
             let einkaufsPunkt = split.toString();
             einkaufsPunkt = einkaufsPunkt.trim();
             einkaufsPunkt = einkaufsPunkt.replace(/,/g, '');
-            console.log("p: " + einkaufsPunkt);
             let cPunkt = {
                 "itId": 100,
                 "einkaufsPunkt": einkaufsPunkt,
@@ -118,7 +99,6 @@ class App extends React.Component {
 
             const promise = AxiosCalls('post', '/einkaufsListe', cPunkt);
             promise.then(item => {
-                console.log("App: Post .then:", item.data);
                 let punkt = [...this.state.punkt];
                 punkt.push(item.data);
                 this.setState({punkt: punkt});
@@ -126,9 +106,8 @@ class App extends React.Component {
         }
     }
 
-
     /**
-     * Von child to parent component, Wird im Child  listElement aufgerufen und mit de übergeben werte wird im state in ein orbjekt geupadtet
+     * Von child to parent component, Wird im Child  listElement aufgerufen und mit den übergeben Werten wird im state in ein Objekt geupadtet
      * @param {number} id - id des obekts fürs backend
      * @param {string} title - einkaufsPunkt (name des Artikels)
      * @param  harken - sind die einkaufsPunkte erledigt oder nicht
@@ -136,11 +115,8 @@ class App extends React.Component {
      * @param {string} notizen - Notizen / bemerkungen zum artikel
      */
     updatePunktInState(id, title, harken, anzahl, notizen) {
-        console.log("parameter: " + id + " " + title + " " + anzahl + " " + notizen)
-        console.log("punkt " + this.state.punkt[0]);
         let punkt = [...this.state.punkt];
         let i = punkt.map(a => a.itId).indexOf(id);
-        console.log("i: " + i);
         let cPunkt = {...punkt[id]};
         cPunkt = {
             "itId": id,
@@ -151,7 +127,6 @@ class App extends React.Component {
         }
         punkt[i] = cPunkt;
         this.setState({punkt});
-        console.log("punktTest: " + id + " " + this.state.punkt[i].itId, this.state.punkt[i].einkaufsPunkt, this.state.punkt[i].notizen);
     }
 
     /**
@@ -160,8 +135,6 @@ class App extends React.Component {
      * @param harken = ist ein einkauf erledigt oder nicht
      */
     updatePunktStrichDoneOrNot(id, harken) {
-
-        console.log("harken: " + harken);// strichw wert muss noch geändert werden.
         let punkt = [...this.state.punkt];
         let indexItem = punkt.map(a => a.itId).indexOf(id);
         let punktErledigt = [...this.state.punktErledigt];
