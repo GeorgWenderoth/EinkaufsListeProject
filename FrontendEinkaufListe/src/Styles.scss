@@ -7,7 +7,6 @@
 }
 
 
-
 .schrift{
   color: white;
   font-family: Arial, sans-serif;
@@ -23,7 +22,6 @@
   max-width: 100%;
   padding: 0;
   display: grid;
-
 
   .reihe {
     margin: 0;
@@ -42,7 +40,6 @@
         margin: 5px;
         height: 180px;
         width: 180px;
-
 
         @include media-breakpoint-down(sm) {
           height: 120px;
@@ -65,7 +62,6 @@
               font-size: 300%;
               margin-bottom: 0;
             }
-
           }
         }
 
@@ -107,7 +103,6 @@
           }
         }
 
-
         .buttonHull {
           display: grid;
           .bearbeitungsButton {
@@ -122,29 +117,19 @@
       }
 
       .cardColourRed {
-        background-color: #bc4040 //darkred;  #bc4040
+        background-color: #bc4040;
       }
 
       .cardColourRed:hover {
-        background-color: teal;//darkgreen;
+        background-color: teal;
       }
 
       .cardColourGreen {
-        background-color: teal;//darkgreen;
+        background-color: teal;
       }
 
       .cardColourGreen:hover {
-        background-color: #bc4040;//darkred;
+        background-color: #bc4040;
       }
     }
   }
-
-
-
-
-
-
-
-
-
-
