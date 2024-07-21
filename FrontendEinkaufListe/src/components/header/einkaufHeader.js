@@ -3,26 +3,14 @@ import React, {useState} from "react";
 import "./header.scss";
 import {ErrorMessage, Formik, Form, Field} from 'formik';
 
-
 export function EinkaufHeader(props){
-
-
-
-    /**
-     * Übergibt eingabe (Itemname) an props.handleSubmit
-     * @param event
-     */
-   /* const handleSubmitHeader=(event)=>{
-        event.preventDefault(); //event.preventDefault  seite wird nicht mehr selbstständig geladen wegen onSubmit
-        props.handleSubmit(value.einkaufspunkt);
-    } */
 
     const onSubmit = (values, { setSubmitting}) => {
         props.handleSubmit(values.einkaufspunkt).finally( ()=> {
             setSubmitting(false);
         });
-
     }
+    
     /**
      * Überprüft ob die Eingaben korrekt sind, gibt Fehlermeldung aus wenn nicht
      * @param values
@@ -43,15 +31,6 @@ export function EinkaufHeader(props){
         return errors;
     }
 
-    /**
-     * speichert veränderungen bei der eingabe onChange im state
-     * @param event
-     */
-  /* const handleChange =(event) => {
-        setValue(event.target.value); //warum geschweifte klammern
-       // console.log(value);
-    } */
-
     return(
         <div className="header">
             <h1 className="ueberschrift">Digitale Einkaufsliste</h1>
@@ -61,8 +40,6 @@ export function EinkaufHeader(props){
                         isSubmitting,
                         errors,
                         values,
-
-
                     }) => (
                         <Form className="row g-3 justify-content-center"/*className="addButton"*/
                             /*onSubmit={handleSubmitHeader}*/ >
@@ -75,16 +52,9 @@ export function EinkaufHeader(props){
                             </div>
                             <div className="col-auto"> <Button className="btn-secondary"> Login</Button></div>
                         </Form>
-
                     )
-
-
                 }
-
-            </Formik>
-            
+            </Formik>  
         </div>
     )
 }
-
-
