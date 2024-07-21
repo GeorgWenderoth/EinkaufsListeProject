@@ -12,14 +12,14 @@ import java.util.List;
  */
 public class GroceryController {
 
-
     public GroceryService service;
+    
     public GroceryController(GroceryService groceryService){ //warum
         this.service = groceryService;
     }
 
     /**
-     * Gibt alle nicht erledigten einkäufe zurück
+     * Gibt alle nicht erledigten Einkäufe zurück
      * @return
      */
     @CrossOrigin
@@ -37,12 +37,13 @@ public class GroceryController {
     public  ResponseEntity<List<EinkaufElement>> getEinkaufDone(){
         return new  ResponseEntity<>(service.getEinkaufElementsByStrich(true),HttpStatus.OK);
     }
-/*
+
+    @Deprecated
     @CrossOrigin
     @GetMapping ("/einkaufsListeElemente")
     public ResponseEntity<List<EinkaufElement>> getEinkauf(){
         return new ResponseEntity<>(service.getEinkaufElements(), HttpStatus.OK);
-    } */
+    } 
 
     /**
      * Fügt einen neuen Einkauf hinzu
@@ -52,15 +53,8 @@ public class GroceryController {
     @CrossOrigin
     @PostMapping("/einkaufsListe")
     public ResponseEntity<EinkaufElement> neuerEinkauf(@RequestBody EinkaufElement element){
-        System.out.println("Testelement");
-        System.out.println( element);
-        System.out.println("punkt:" + element.getEinkaufsPunkt());
-        System.out.println("id " + element.getItId());
-        System.out.println("strich" + element.getStrich());
-
         final  EinkaufElement einkaufElement = service.erstelleElement(element);
         return  new ResponseEntity<>(einkaufElement, HttpStatus.CREATED); // Warum nochmal returnen
-
     }
 
     /**
@@ -84,15 +78,14 @@ public class GroceryController {
     public ResponseEntity<EinkaufElement> update(@RequestBody EinkaufElement element){
         return new ResponseEntity<>(this.service.updateElementM(element.getItId(), element.getAmount(), element.getEinkaufsPunkt(), element.getNotizen()),HttpStatus.OK);
     }
-    /* Brauche ich das noch?
+
+    @Deprecated
     @CrossOrigin
     @DeleteMapping("/einkaufsListeElementLoeschen")
     public ResponseEntity<Void> loescheElement(@RequestBody EinkaufElement element){
         service.loescheElement(element.getItId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-     */
 
     /**
      * Löscht alle erledigten elemente
@@ -103,6 +96,4 @@ public class GroceryController {
         service.loescheElementeDone();
         return ;
     }
-
-
 }
