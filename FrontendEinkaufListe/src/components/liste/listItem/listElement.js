@@ -8,7 +8,7 @@ import "../../App.scss";
 import {AxiosCalls} from "../../../utils/axiosCalls";
 
 /**
- * Generiert ein Listen element / Item / einkaufspunkt mit den übergebenen werten
+ * Generiert ein ListElement / Item / einkaufspunkt mit den übergebenen Werten
  * @param props
  * @returns {JSX.Element}
  * @constructor
@@ -27,14 +27,12 @@ export function ListElement(props) {
      */
     const handleNumber = (e) => {
         setAmount(e.target.value);
-        console.log("nummber: " + e + "id: " + props.item.itId);
     }
 
     /**
      * Setzt im Backend durch AxiosCalls und im App state über props.updateDone ein Item auf erledigt
      */
     const einkaufErledigt = () => {
-        console.log("card or box klicked: " + props.item.itId);
         const ob = {
             "itId": props.id,
             "einkaufsPunkt": "platzhalterdatenloeschen",
@@ -43,14 +41,12 @@ export function ListElement(props) {
         }
         AxiosCalls('put','/einkaufsListeDurchgestrichen',ob);
         props.updateDoneOrNot(props.id, props.item.strich);
-
     }
 
     /**
-     * Schließt Modal und speichert die änderungen im Backend (AxiosCalls) und im Frontend State (props.updatePunkt)
+     * Schließt Modal und speichert die Änderungen im Backend (AxiosCalls) und im Frontend State (props.updatePunkt)
      */
     const handleClose = () => {
-        console.log("notizen: " + notes);
        const ob = {
            "itId": props.item.itId,
            "einkaufsPunkt": titel,
@@ -68,7 +64,6 @@ export function ListElement(props) {
      * Schließt Modal nur, ohne zu speichernt, setzt Werte auf vorher zurück
      */
     const handleCloseWithoutSaving = () => {
-
         setShowM(false);
         setTitel(props.item.einkaufsPunkt);
         setNotes(props.item.notizen);
@@ -81,7 +76,6 @@ export function ListElement(props) {
     const handleNotes = (e) => setNotes(e.target.value)
 
     return (
-
         <Card className={"cardStyle " + (displayColour ? 'cardColourGreen' : 'cardColourRed')}
               style={{border: '3px', cursor: "pointer"}}
               key={props.item.itId.toString()}>
@@ -134,9 +128,6 @@ export function ListElement(props) {
                     <p className="punkt">{props.item.einkaufsPunkt}</p> <p className="punktAmount">{props.item.amount}</p>
                 </div>
             </Card.Body>
-
         </Card>
-
     )
 }
-
