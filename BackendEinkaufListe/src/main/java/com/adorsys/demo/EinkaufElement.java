@@ -37,11 +37,9 @@ public class EinkaufElement{
         this.itId = itId;
     }
 
-
     public String getEinkaufsPunkt(){
         return einkaufsPunkt;
     }
-
 
     public void setEinkaufsPunkt(String einkaufsPunkt) {
         this.einkaufsPunkt = einkaufsPunkt;
